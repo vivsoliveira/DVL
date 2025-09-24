@@ -1,0 +1,30 @@
+// Exemplo simples em DVL
+
+valor := read() .
+limite := 10 .
+
+// Condicional
+if (valor > limite) {
+  print(valor) .
+} else {
+  print(limite) .
+}
+
+// Loop para somar de valor até 1
+soma := 0 .
+loop (valor > 0) {
+  soma := soma + valor .
+  valor := valor - 1 .
+}
+
+print(soma) .
+
+// Usando funções estatísticas nativas
+a := 4 .
+b := 8 .
+c := 12 .
+
+print(@sum(a, b, c)) .
+print(@mean(a, b, c)) .
+print(@min(a, b, c)) .
+print(@max(a, b, c)) .
