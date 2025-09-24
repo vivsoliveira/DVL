@@ -55,3 +55,23 @@ A gramática completa encontra-se no arquivo [`gramatica.ebnf`](./gramatica.ebnf
 Há dois arquivos de exemplo de utilização de código que podem ser encontrados em [`exemplo_simplificado.dvl`](./exemplo_simplificado.dvl) e [`exemplo_avancado.dvl`](./exemplo_avancado.dvl).
 
 ---
+
+## Diferenciais
+
+O DVL não busca competir com linguagens como Python, R ou C, mas sim oferecer uma alternativa didática e simplificada, voltada para análise de dados em contextos acadêmicos e experimentais.
+Entre os principais diferenciais, destacam-se:
+
+**Sintaxe minimalista e uniforme:**
+- Uso do . (ponto) para encerrar instruções, no lugar de ;.
+- Declaração explícita de variáveis com var, reforçando clareza de código.
+
+**Funções estatísticas nativas:**
+- @mean, @sum, @min, @max já fazem parte da linguagem, sem necessidade de importar bibliotecas.
+- Essas funções podem operar diretamente sobre listas, facilitando analises.
+
+**Identidade própria:**
+- Comentários em dois estilos (// e /* ... */).
+- Suporte a funções definidas pelo usuário.
+- Uso de listas nativas e strings já incorporadas na gramática.
+
+Em resumo, o DVL é uma linguagem feita para aprender, ensinar e explorar conceitos de compiladores e análise de dados, com menos barreiras de entrada que linguagens mais completas como Python e R.
