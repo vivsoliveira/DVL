@@ -1,0 +1,73 @@
+programa ::= { declaracao | comando } ;
+
+declaracao ::= declaracao_variavel
+             | declaracao_funcao ;
+
+declaracao_variavel ::= "var" identificador ":=" expressao "." ;
+
+declaracao_funcao ::= "func" identificador "(" [ lista_parametros ] ")" bloco ;
+
+lista_parametros ::= identificador { "," identificador } ;
+
+comando ::= atribuicao
+          | comando_impressao
+          | comando_leitura
+          | comando_condicional
+          | comando_repeticao
+          | comando_retorno
+          | bloco ;
+
+atribuicao ::= identificador ":=" expressao "." ;
+comando_impressao ::= "print" "(" expressao ")" "." ;
+comando_leitura ::= identificador ":=" "read" "()" "." ;
+comando_retorno ::= "return" expressao "." ;
+
+comando_condicional ::= "if" "(" expressao ")" bloco [ "else" bloco ] ;
+comando_repeticao ::= "loop" "(" expressao ")" bloco ;
+
+bloco ::= "{" { comando } "}" ;
+
+expressao ::= logico_ou ;
+
+logico_ou ::= logico_e { "||" logico_e } ;
+logico_e ::= igualdade { "&&" igualdade } ;
+igualdade ::= relacional { ("==" | "!=") relacional } ;
+relacional ::= aditiva { ("<" | ">" | "<=" | ">=") aditiva } ;
+aditiva ::= multiplicativa { ("+" | "-" ) multiplicativa } ;
+multiplicativa ::= unaria { ("*" | "/" | "%") unaria } ;
+unaria ::= [ "!" | "-" ] primario ;
+
+primario ::= numero
+           | texto
+           | identificador
+           | "(" expressao ")"
+           | lista
+           | chamada_funcao
+           | funcao_estatistica ;
+
+chamada_funcao ::= identificador "(" [ lista_argumentos ] ")" ;
+lista_argumentos ::= expressao { "," expressao } ;
+
+funcao_estatistica ::= ("@mean" | "@sum" | "@min" | "@max") "(" lista_expressoes ")" ;
+lista_expressoes ::= expressao { "," expressao } ;
+
+lista ::= "[" [ lista_expressoes ] "]" ;
+
+numero ::= digito { digito } ;
+texto ::= "\"" { caractere } "\"" ;
+
+identificador ::= letra { letra | digito | "_" } ;
+
+digito ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+
+letra ::= "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j"
+        | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t"
+        | "u" | "v" | "w" | "x" | "y" | "z"
+        | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J"
+        | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T"
+        | "U" | "V" | "W" | "X" | "Y" | "Z" ;
+
+caractere ::= letra | digito | " " | "!" | "?" | "," | "." | "+" | "-" | "*" | "/" ;
+
+comentario ::= "//" { caractere } "\n"
+             | "/*" { caractere } "*/" ;
