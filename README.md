@@ -38,7 +38,7 @@ A criação do **DVL** surgiu da necessidade de uma linguagem:
 
 ## Gramática (EBNF)
 
-A gramática completa encontra-se no arquivo [`grammar.ebnf`](./grammar.ebnf).  
+A gramática completa encontra-se no arquivo [`grammar.ebnf`](./gramatica.ebnf).  
 A seguir, um trecho resumido:
 
 program = { statement } ;
