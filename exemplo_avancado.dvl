@@ -46,9 +46,9 @@ var resultado := quadrado(7) .
 print("O quadrado de 7 é:") .
 print(resultado) .
 
-
-// Se a entrada for 8 a saida tem de ser:
 /*
+Se a entrada for 8, a saída deve ser:
+
 O valor digitado é maior que o limite.
 Resultado da soma acumulada:
 36
