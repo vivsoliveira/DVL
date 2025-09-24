@@ -1,0 +1,65 @@
+// Exemplo avançado em DVL
+
+// Lê um número do usuário
+var entrada := read() .
+var limite := 5 .
+
+// Condicional simples
+if (entrada > limite) {
+  print("O valor digitado é maior que o limite.") .
+} else {
+  print("O valor digitado é menor ou igual ao limite.") .
+}
+
+// Loop para calcular a soma de entrada até 1
+var soma := 0 .
+loop (entrada > 0) {
+  soma := soma + entrada .
+  entrada := entrada - 1 .
+}
+
+print("Resultado da soma acumulada:") .
+print(soma) .
+
+// Lista de valores para operações estatísticas
+var numeros := [3, 6, 9, 12] .
+
+print("Soma dos valores:") .
+print(@sum(numeros)) .
+
+print("Média dos valores:") .
+print(@mean(numeros)) .
+
+print("Mínimo dos valores:") .
+print(@min(numeros)) .
+
+print("Máximo dos valores:") .
+print(@max(numeros)) .
+
+// Definição de função
+func quadrado(valor) {
+  return valor * valor .
+}
+
+// Uso de função definida pelo usuário
+var resultado := quadrado(7) .
+print("O quadrado de 7 é:") .
+print(resultado) .
+
+
+// Se a entrada for 8 a saida tem de ser:
+/*
+O valor digitado é maior que o limite.
+Resultado da soma acumulada:
+36
+Soma dos valores:
+30
+Média dos valores:
+7
+Mínimo dos valores:
+3
+Máximo dos valores:
+12
+O quadrado de 7 é:
+49
+*/
