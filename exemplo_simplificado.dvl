@@ -1,38 +1,59 @@
 // Exemplo simples em DVL
 
-valor := read() .
-limite := 10 .
+var valor := read() .
+var limite := 10 .
 
 // Condicional
 if (valor > limite) {
+  print("Valor maior que o limite:") .
   print(valor) .
 } else {
+  print("Valor menor ou igual ao limite:") .
   print(limite) .
 }
 
 // Loop para somar de valor até 1
-soma := 0 .
+var soma := 0 .
 loop (valor > 0) {
   soma := soma + valor .
   valor := valor - 1 .
 }
 
+print("Soma acumulada:") .
 print(soma) .
 
 // Usando funções estatísticas nativas
-a := 4 .
-b := 8 .
-c := 12 .
+var a := 4 .
+var b := 8 .
+var c := 12 .
 
-print(@sum(a, b, c)) .
-print(@mean(a, b, c)) .
-print(@min(a, b, c)) .
-print(@max(a, b, c)) .
+var lista := [a, b, c] .
 
-/* se a entrada for 7 a saida esperada é 
+print("Soma:") .
+print(@sum(lista)) .
+
+print("Média:") .
+print(@mean(lista)) .
+
+print("Mínimo:") .
+print(@min(lista)) .
+
+print("Máximo:") .
+print(@max(lista)) .
+
+/*
+Se a entrada for 7, a saída esperada é:
+
+Valor maior que o limite:
 10
+Soma acumulada:
 28
+Soma:
 24
+Média:
 8
+Mínimo:
 4
-12*/
+Máximo:
+12
+*/
