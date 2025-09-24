@@ -52,6 +52,6 @@ A gramática completa encontra-se no arquivo [`gramatica.ebnf`](./gramatica.ebnf
 
 ## Exemplo de Código
 
-Há dois arquivos de exemplo de utilização de código que podem ser encontrados em [`exemplo_simplificado.`](./exemplo.vdl) e [`exemplo_avancado.dvl`](./exemplo_avancado.vdl).
+Há dois arquivos de exemplo de utilização de código que podem ser encontrados em [`exemplo_simplificado.`](./exemplo1.vdl) e [`exemplo_avancado.dvl`](./exemplo_avancado.dvl).
 
 ---
