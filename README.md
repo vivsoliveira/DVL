@@ -5,7 +5,7 @@ Inspirada em R e em linguagens funcionais de análise, o DVL foi projetado para 
 
 ---
 
-## 🚀 Motivação
+## Motivação
 
 A criação do **DVL** surgiu da necessidade de uma linguagem:
 
