@@ -28,3 +28,12 @@ print(@sum(a, b, c)) .
 print(@mean(a, b, c)) .
 print(@min(a, b, c)) .
 print(@max(a, b, c)) .
+
+// se a entrada for 7 a saida esperada é 
+// 10
+// 28
+// 24
+// 8
+// 4
+// 12
+
