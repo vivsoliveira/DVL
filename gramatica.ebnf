@@ -1,59 +1,87 @@
-programa ::= { declaracao | comando } ;
+programa ::= { unidade } EOF ;
 
-declaracao ::= declaracao_variavel
-             | declaracao_funcao ;
+unidade ::= declaracao | comando ;
 
-declaracao_variavel ::= "var" identificador ":=" expressao "." ;
+(* Declarações *)
+declaracao ::= decl_variavel | decl_funcao | decl_dataset ;
 
-declaracao_funcao ::= "func" identificador "(" [ lista_parametros ] ")" bloco ;
+decl_variavel ::= "decl" ( "val" | "var" ) identificador [ ":" tipo ] ":=" expressao ";" ;
+tipo ::= "int" | "float" | "bool" | "string" | "lista" ;
+
+decl_funcao ::= "funcao" identificador "(" [ lista_parametros ] ")" bloco ;
 
 lista_parametros ::= identificador { "," identificador } ;
 
+decl_dataset ::= "dataset" string "{" campos_dataset "}" ";" ;
+campos_dataset ::= campo_dataset { "," campo_dataset } ;
+campo_dataset ::= identificador ":" lista ;
+
+(* Comandos / statements *)
 comando ::= atribuicao
-          | comando_impressao
-          | comando_leitura
-          | comando_condicional
-          | comando_repeticao
-          | comando_retorno
-          | bloco ;
+          | mostrar
+          | ler
+          | se_senao
+          | enquanto
+          | retorno
+          | bloco
+          | expressao ";" ;
 
-atribuicao ::= identificador ":=" expressao "." ;
-comando_impressao ::= "print" "(" expressao ")" "." ;
-comando_leitura ::= identificador ":=" "read" "()" "." ;
-comando_retorno ::= "return" expressao "." ;
+atribuicao ::= identificador ":=" expressao ";" ;
 
-comando_condicional ::= "if" "(" expressao ")" bloco [ "else" bloco ] ;
-comando_repeticao ::= "loop" "(" expressao ")" bloco ;
+mostrar ::= "mostrar" "(" expressao { "," expressao } ")" ";" ;
+ler ::= identificador ":=" "ler" "()" ";" ;
 
-bloco ::= "{" { comando } "}" ;
+retorno ::= "retorna" expressao ";" ;
 
-expressao ::= logico_ou ;
+se_senao ::= "se" "(" expressao ")" bloco [ "senao" bloco ] ;
 
-logico_ou ::= logico_e { "||" logico_e } ;
-logico_e ::= igualdade { "&&" igualdade } ;
-igualdade ::= relacional { ("==" | "!=") relacional } ;
-relacional ::= aditiva { ("<" | ">" | "<=" | ">=") aditiva } ;
-aditiva ::= multiplicativa { ("+" | "-" ) multiplicativa } ;
-multiplicativa ::= unaria { ("*" | "/" | "%") unaria } ;
-unaria ::= [ "!" | "-" ] primario ;
+enquanto ::= "enquanto" "(" expressao ")" bloco ;
+
+bloco ::= "{" { declaracao | comando } "}" ;
+
+(* Expressões e precedência *)
+expressao ::= pipeline ;
+
+pipeline ::= aplicacao { "->>" aplicacao } ;
+
+aplicacao ::= membro { "(" [ lista_argumentos ] ")" } ;
+
+lista_argumentos ::= expressao { "," expressao } ;
+
+membro ::= operacao_binaria ;
+
+operacao_binaria ::= logico_ou ;
+
+logico_ou ::= logico_e { ( "ou" | "||" ) logico_e } ;
+logico_e ::= igualdade { ( "e" | "&&" ) igualdade } ;
+igualdade ::= relacional { ( "==" | "!=" | "eh" ) relacional } ;
+relacional ::= aditiva { ( "<" | ">" | "<=" | ">=" ) aditiva } ;
+aditiva ::= multiplicativa { ( "+" | "-" ) multiplicativa } ;
+multiplicativa ::= unaria { ( "*" | "/" | "%" ) unaria } ;
+unaria ::= ( "nao" | "!" | "-" ) unaria | primario ;
 
 primario ::= numero
            | texto
            | identificador
            | "(" expressao ")"
            | lista
-           | chamada_funcao
-           | funcao_estatistica ;
-
-chamada_funcao ::= identificador "(" [ lista_argumentos ] ")" ;
-lista_argumentos ::= expressao { "," expressao } ;
-
-funcao_estatistica ::= ("@mean" | "@sum" | "@min" | "@max") "(" lista_expressoes ")" ;
-lista_expressoes ::= expressao { "," expressao } ;
+           | tabela
+           | chamada_estatistica
+           | acesso_coluna ;
 
 lista ::= "[" [ lista_expressoes ] "]" ;
+lista_expressoes ::= expressao { "," expressao } ;
 
-numero ::= digito { digito } ;
+tabela ::= "{" campos_tabela "}" ;
+campos_tabela ::= campo_tabela { "," campo_tabela } ;
+campo_tabela ::= identificador ":" lista ;
+
+chamada_estatistica ::= "#" identificador "(" expressao_or_lista ")" ;
+expressao_or_lista ::= expressao | lista | identificador ;
+
+acesso_coluna ::= identificador "." identificador ; (* ex: vendas.valor *)
+
+numero ::= digito { digito } [ "." digito { digito } ] ;
 texto ::= "\"" { caractere } "\"" ;
 
 identificador ::= letra { letra | digito | "_" } ;
@@ -69,5 +97,6 @@ letra ::= "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j"
 
 caractere ::= letra | digito | " " | "!" | "?" | "," | "." | "+" | "-" | "*" | "/" ;
 
-comentario ::= "//" { caractere } "\n"
+comentario ::= "#" { caractere } ( "\n" | EOF )
+             | "//" { caractere } ( "\n" | EOF )
              | "/*" { caractere } "*/" ;
