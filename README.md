@@ -59,7 +59,7 @@ A criação do **DVL** surgiu da necessidade de uma linguagem:
 
 ## Gramática (EBNF)
 
-A gramática completa encontra-se no arquivo [`gramatica_atualizada.ebnf`](./gramatica_atualizada.ebnf).
+A gramática completa encontra-se no arquivo [`gramatica.ebnf`](./gramatica.ebnf).
 
 ---
 
