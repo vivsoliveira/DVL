@@ -1,59 +1,42 @@
-// Exemplo simples em DVL
+# Exemplo simplificado DVL (nova sintaxe)
+# Entrada simulada: 7
 
-var valor := read() .
-var limite := 10 .
+decl val valor : int := ler() ;
+decl val limite : int := 10 ;
 
-// Condicional
-if (valor > limite) {
-  print("Valor maior que o limite:") .
-  print(valor) .
-} else {
-  print("Valor menor ou igual ao limite:") .
-  print(limite) .
+se (valor > limite) {
+  mostrar("Valor maior que o limite:") ;
+  mostrar(valor) ;
+} senao {
+  mostrar("Valor menor ou igual ao limite:") ;
+  mostrar(limite) ;
 }
 
-// Loop para somar de valor até 1
-var soma := 0 .
-loop (valor > 0) {
-  soma := soma + valor .
-  valor := valor - 1 .
+decl var soma : int := 0 ;
+decl var contador : int := valor ;
+
+enquanto (contador > 0) {
+  soma := soma + contador ;
+  contador := contador - 1 ;
 }
 
-print("Soma acumulada:") .
-print(soma) .
+mostrar("Soma acumulada:") ;
+mostrar(soma) ;
 
-// Usando funções estatísticas nativas
-var a := 4 .
-var b := 8 .
-var c := 12 .
+decl val a := 4 ;
+decl val b := 8 ;
+decl val c := 12 ;
 
-var lista := [a, b, c] .
+decl val lista := [a, b, c] ;
 
-print("Soma:") .
-print(@sum(lista)) .
+mostrar("Soma:") ;
+mostrar( #soma(lista) ) ;
 
-print("Média:") .
-print(@mean(lista)) .
+mostrar("Media:") ;
+mostrar( #media(lista) ) ;
 
-print("Mínimo:") .
-print(@min(lista)) .
+mostrar("Minimo:") ;
+mostrar( #minimo(lista) ) ;
 
-print("Máximo:") .
-print(@max(lista)) .
-
-/*
-Se a entrada for 7, a saída esperada é:
-
-Valor maior que o limite:
-10
-Soma acumulada:
-28
-Soma:
-24
-Média:
-8
-Mínimo:
-4
-Máximo:
-12
-*/
+mostrar("Maximo:") ;
+mostrar( #maximo(lista) ) ;
