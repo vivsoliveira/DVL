@@ -1,65 +1,51 @@
-// Exemplo avançado em DVL
+# Exemplo avançado DVL (nova sintaxe)
+# Entrada simulada: 8
 
-// Lê um número do usuário
-var entrada := read() .
-var limite := 5 .
+decl val entrada : int := ler() ;
+decl val limite : int := 5 ;
 
-// Condicional simples
-if (entrada > limite) {
-  print("O valor digitado é maior que o limite.") .
-} else {
-  print("O valor digitado é menor ou igual ao limite.") .
+se (entrada > limite) {
+  mostrar("O valor digitado é maior que o limite") ;
+} senao {
+  mostrar("O valor digitado é menor ou igual ao limite") ;
 }
 
-// Loop para calcular a soma de entrada até 1
-var soma := 0 .
-loop (entrada > 0) {
-  soma := soma + entrada .
-  entrada := entrada - 1 .
+decl var soma : int := 0 ;
+decl var contador : int := entrada ;
+
+enquanto (contador > 0) {
+  soma := soma + contador ;
+  contador := contador - 1 ;
 }
 
-print("Resultado da soma acumulada:") .
-print(soma) .
+mostrar("Resultado da soma acumulada:") ;
+mostrar(soma) ;
 
-// Lista de valores para operações estatísticas
-var numeros := [3, 6, 9, 12] .
+# Declara dataset nativo
+dataset "numeros" { valores: [3, 6, 9, 12] } ;
 
-print("Soma dos valores:") .
-print(@sum(numeros)) .
+mostrar("Soma dos valores:") ;
+mostrar( #soma(numeros.valores) ) ;
 
-print("Média dos valores:") .
-print(@mean(numeros)) .
+mostrar("Media dos valores:") ;
+mostrar( #media(numeros.valores) ) ;
 
-print("Mínimo dos valores:") .
-print(@min(numeros)) .
+mostrar("Minimo dos valores:") ;
+mostrar( #minimo(numeros.valores) ) ;
 
-print("Máximo dos valores:") .
-print(@max(numeros)) .
+mostrar("Maximo dos valores:") ;
+mostrar( #maximo(numeros.valores) ) ;
 
-// Definição de função
-func quadrado(valor) {
-  return valor * valor .
+# Funcao em portugues
+funcao quadrado(x) {
+  retorna x * x ;
 }
 
-// Uso de função definida pelo usuário
-var resultado := quadrado(7) .
-print("O quadrado de 7 é:") .
-print(resultado) .
+decl val resultado := quadrado(7) ;
+mostrar("O quadrado de 7 é:") ;
+mostrar(resultado) ;
 
-/*
-Se a entrada for 8, a saída deve ser:
-
-O valor digitado é maior que o limite.
-Resultado da soma acumulada:
-36
-Soma dos valores:
-30
-Média dos valores:
-7
-Mínimo dos valores:
-3
-Máximo dos valores:
-12
-O quadrado de 7 é:
-49
-*/
+# Pipeline: aplicar media diretamente à coluna
+decl val media_lista := numeros.valores ->> #media ;
+mostrar("Media via pipeline:") ;
+mostrar(media_lista) ;
