@@ -1,42 +1,40 @@
-# Exemplo simplificado DVL (nova sintaxe)
-# Entrada simulada: 7
+# exemplo_simplificado.dvl
+# Amostragem temporal simples com registradores e sensores
 
-decl val valor : int := ler() ;
-decl val limite : int := 10 ;
+# Registradores: contadores e acumuladores rápidos (mapeados para registradores da VM)
+reg var tempo : int := 0 ;        # contador de tempo (minutos)
+reg var chuva_acumulada : float := 0.0 ;  # acumulador de precipitação durante a simulação
 
-se (valor > limite) {
-  mostrar("Valor maior que o limite:") ;
-  mostrar(valor) ;
-} senao {
-  mostrar("Valor menor ou igual ao limite:") ;
-  mostrar(limite) ;
+# Sensores (readonly) fornecidos pela VM / ambiente
+sensor vento : int ;   # km/h
+sensor chuva : float ; # mm/h (ou escala definida)
+sensor luz : int ;     # lux
+sensor temp : float ;  # temperatura em °C
+
+# Limite de simulação (minutos)
+decl val limite : int := 60 ;
+
+mostrar("Iniciando amostragem temporal...") ;
+
+enquanto (tempo < limite) {
+  tempo := tempo + 1 ;                    # avança unidade de tempo (1 minuto)
+  
+  # atualiza acumulador usando sensor de chuva (ex.: mm/h convertido por amostra)
+  chuva_acumulada := chuva_acumulada + chuva * 1.0 / 60.0 ;  # converte taxa por hora -> mm por minuto
+
+  # alerta por vento forte
+  se (vento > 80) {
+    mostrar("Alerta vento forte no minuto:") ;
+    mostrar(tempo) ;
+  }
+
+  # condição combinada: chuva e baixa luminosidade
+  se (chuva > 0.5 e luz < 200) {
+    mostrar("Chuva leve detectada em minuto:") ;
+    mostrar(tempo) ;
+  }
 }
 
-decl var soma : int := 0 ;
-decl var contador : int := valor ;
-
-enquanto (contador > 0) {
-  soma := soma + contador ;
-  contador := contador - 1 ;
-}
-
-mostrar("Soma acumulada:") ;
-mostrar(soma) ;
-
-decl val a := 4 ;
-decl val b := 8 ;
-decl val c := 12 ;
-
-decl val lista := [a, b, c] ;
-
-mostrar("Soma:") ;
-mostrar( #soma(lista) ) ;
-
-mostrar("Media:") ;
-mostrar( #media(lista) ) ;
-
-mostrar("Minimo:") ;
-mostrar( #minimo(lista) ) ;
-
-mostrar("Maximo:") ;
-mostrar( #maximo(lista) ) ;
+mostrar("Amostragem finalizada.") ;
+mostrar("Chuva acumulada (mm):") ;
+mostrar(chuva_acumulada) ;
