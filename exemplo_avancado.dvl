@@ -1,51 +1,54 @@
-# Exemplo avançado DVL (nova sintaxe)
-# Entrada simulada: 8
+# exemplo_avancado.dvl
 
-decl val entrada : int := ler() ;
-decl val limite : int := 5 ;
+# Registradores para estados e janelas temporais
+reg var tempo_atual : int := 0 ;
+reg var chuva_total : float := 0.0 ;
+reg var janela_index : int := 0 ;
 
-se (entrada > limite) {
-  mostrar("O valor digitado é maior que o limite") ;
-} senao {
-  mostrar("O valor digitado é menor ou igual ao limite") ;
+# Sensores (readonly)
+sensor chuva : float ;
+sensor vento : int ;
+sensor luz : int ;
+sensor temp : float ;
+
+# Dataset histórico com timestamps (minutos), chuva (mm) e vento (km/h)
+dataset "leituras" {
+  timestamp: [0, 10, 20, 30, 40, 50],
+  chuva:     [0.0, 3.2, 0.0, 12.5, 0.0, 0.0],
+  vento:     [5, 12, 8, 35, 60, 10]
+} ;
+
+# estatísticas históricas
+decl val chuva_historica_total := #soma(leituras.chuva) ;
+decl val vento_medio_historico := leituras.vento ->> #media ;
+
+mostrar("Resumo historico:") ;
+mostrar("Chuva total (historico):") ;
+mostrar(chuva_historica_total) ;
+mostrar("Vento medio (historico):") ;
+mostrar(vento_medio_historico) ;
+
+# inicializa acumulador com histórico
+chuva_total := chuva_historica_total ;
+
+# janelas temporais: exemplo simples de agregação por janela (pseudo-logic)
+# suponha que recebemos amostras minuto a minuto e acumulamos em janelas de 10 minutos
+enquanto (tempo_atual < 120) {
+  tempo_atual := tempo_atual + 1 ;
+
+  # cada minuto somamos a chuva atual (sensor)
+  chuva_total := chuva_total + chuva * 1.0 / 60.0 ;
+
+  # quando completar janela de 10 minutos, computa média (exemplo)
+  se (tempo_atual % 10 == 0) {
+    mostrar("Janela finalizada em minuto:") ;
+    mostrar(tempo_atual) ;
+    mostrar("Chuva acumulada ate agora:") ;
+    mostrar(chuva_total) ;
+    janela_index := janela_index + 1 ;
+  }
 }
 
-decl var soma : int := 0 ;
-decl var contador : int := entrada ;
-
-enquanto (contador > 0) {
-  soma := soma + contador ;
-  contador := contador - 1 ;
-}
-
-mostrar("Resultado da soma acumulada:") ;
-mostrar(soma) ;
-
-# Declara dataset nativo
-dataset "numeros" { valores: [3, 6, 9, 12] } ;
-
-mostrar("Soma dos valores:") ;
-mostrar( #soma(numeros.valores) ) ;
-
-mostrar("Media dos valores:") ;
-mostrar( #media(numeros.valores) ) ;
-
-mostrar("Minimo dos valores:") ;
-mostrar( #minimo(numeros.valores) ) ;
-
-mostrar("Maximo dos valores:") ;
-mostrar( #maximo(numeros.valores) ) ;
-
-# Funcao em portugues
-funcao quadrado(x) {
-  retorna x * x ;
-}
-
-decl val resultado := quadrado(7) ;
-mostrar("O quadrado de 7 é:") ;
-mostrar(resultado) ;
-
-# Pipeline: aplicar media diretamente à coluna
-decl val media_lista := numeros.valores ->> #media ;
-mostrar("Media via pipeline:") ;
-mostrar(media_lista) ;
+mostrar("Processamento de janelas concluido.") ;
+mostrar("Chuva total apos amostragens:") ;
+mostrar(chuva_total) ;
