@@ -3,9 +3,12 @@ programa ::= { unidade } EOF ;
 unidade ::= declaracao | comando ;
 
 (* Declarações *)
-declaracao ::= decl_variavel | decl_funcao | decl_dataset ;
+declaracao ::= decl_variavel | decl_funcao | decl_dataset | registrador_decl | sensor_decl ;
 
 decl_variavel ::= "decl" ( "val" | "var" ) identificador [ ":" tipo ] ":=" expressao ";" ;
+registrador_decl ::= "reg" ( "val" | "var" ) identificador [ ":" tipo ] ":=" expressao ";" ;
+sensor_decl      ::= "sensor" identificador ":" tipo ";" ;
+
 tipo ::= "int" | "float" | "bool" | "string" | "lista" ;
 
 decl_funcao ::= "funcao" identificador "(" [ lista_parametros ] ")" bloco ;
@@ -79,7 +82,7 @@ campo_tabela ::= identificador ":" lista ;
 chamada_estatistica ::= "#" identificador "(" expressao_or_lista ")" ;
 expressao_or_lista ::= expressao | lista | identificador ;
 
-acesso_coluna ::= identificador "." identificador ; (* ex: vendas.valor *)
+acesso_coluna ::= identificador "." identificador ; (* ex: leituras.chuva *)
 
 numero ::= digito { digito } [ "." digito { digito } ] ;
 texto ::= "\"" { caractere } "\"" ;
