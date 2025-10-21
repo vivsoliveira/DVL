@@ -1,42 +1,36 @@
 # DVL - Data Visualization Language
 
-**DVL** é uma linguagem de programação de alto nível criada para **análise de dados simples**, **estatísticas básicas** e **modelagem preditiva introdutória**.
-Inspirada em R e em linguagens funcionais de análise, o DVL foi projetado para ser **fácil de aprender**, com uma **sintaxe enxuta** e recursos essenciais para manipulação de dados em uma máquina virtual (VM) própria.
+**DVL** é uma linguagem de programação de alto nível voltada para **análise de dados temporais** e **monitoramento de sensores ambientais** (como vento, chuva, luz e temperatura).
+Inspirada em **R** e em linguagens funcionais de análise, a DVL foi projetada para ser **didática**, **enxuta** e **fácil de aprender**, servindo como uma plataforma para experimentação de conceitos de compiladores e análise de dados em tempo real.
 
----
-
-## Motivação
-
-A criação do **DVL** surgiu da necessidade de uma linguagem:
-
-* **Didática**: que sirva como exemplo acadêmico no estudo de compiladores.
-* **Simples**: evitando complexidade excessiva em análise de gráficos ou bibliotecas externas.
-* **Voltada a dados**: com suporte nativo para operações estatísticas e condicionais.
-* **Expansível**: permitindo no futuro a inclusão de gráficos comparativos e modelos preditivos mais avançados.
+Além de trabalhar com coleções e estatísticas básicas, a DVL incorpora recursos para manipulação de **fluxos de tempo** e **leituras contínuas de sensores**, mapeando variáveis diretamente para **registradores**, o que permite cálculos e simulações temporais com alto desempenho.
 
 ---
 
 ## Características Principais
 
 * **Declarações explícitas** com `decl val` (imutável) ou `decl var` (mutável).
-* **Tipos opcionais** em variáveis: `int`, `float`, `bool`, `string`, `lista`.
-* **Delimitação de instruções** com `;` (ponto e vírgula, padrão das linguagens estruturadas).
-* **Condicionais** (`se` / `senao`).
-* **Laços de repetição** (`enquanto`).
-* **Entrada e saída**:
+* **Declarações temporais e ambientais**:
+
+  * `reg` — registradores de alta performance para dados que mudam ao longo do tempo (ex.: tempo, acumuladores, índices).
+  * `sensor` — variáveis somente leitura que representam entradas externas da VM (ex.: vento, chuva, luz, temperatura).
+* **Tipos opcionais**: `int`, `float`, `bool`, `string`, `lista`.
+* **Delimitação de instruções** com `;` (ponto e vírgula), mantendo legibilidade.
+* **Condicionais** (`se` / `senao`) e **laços temporais** (`enquanto`).
+* **Entrada e saída** intuitivas:
 
   * `ler()` → lê um valor do usuário.
-  * `mostrar()` → exibe valores na tela.
-* **Coleções**:
+  * `mostrar()` → exibe valores ou medições em tempo real.
+* **Coleções e datasets**:
 
   * Listas: `[1, 2, 3]`.
   * Datasets tabulares:
 
     ```dvl
-    dataset "vendas" { dia: [1,2,3], valor: [100,200,300] };
+    dataset "leituras" { tempo: [0,10,20], chuva: [0.0, 2.3, 0.0] };
     ```
 
-    Acesso direto a colunas: `vendas.valor`.
+    Acesso direto a colunas: `leituras.chuva`.
 * **Funções estatísticas nativas** prefixadas por `#`:
 
   * `#soma(lista)`
@@ -46,10 +40,10 @@ A criação do **DVL** surgiu da necessidade de uma linguagem:
 * **Encadeamento de operações** com o operador de pipeline `->>`:
 
   ```dvl
-  vendas.valor ->> #media ;
+  leituras.chuva ->> #media ;
   ```
 * **Definição de funções** com `funcao nome(parametros) { ... }`.
-* **Retorno de valores** em funções com `retorna valor ;`.
+* **Retorno de valores** com `retorna valor ;`.
 * **Comentários**:
 
   * Linha única: `# exemplo` ou `// exemplo`.
@@ -57,54 +51,84 @@ A criação do **DVL** surgiu da necessidade de uma linguagem:
 
 ---
 
-## Gramática (EBNF)
+## Estruturas Temporais e Sensores
 
-A gramática completa encontra-se no arquivo [`gramatica.ebnf`](./gramatica.ebnf).
+O DVL foi estendido para lidar com **dados que variam ao longo do tempo**, permitindo modelar situações reais de coleta contínua:
+
+### Registradores (`reg`)
+
+Registradores são variáveis armazenadas diretamente em registradores da VM, ideais para contadores, acumuladores e estados temporais.
+
+```dvl
+reg var tempo : int := 0 ;
+reg var chuva_acumulada : float := 0.0 ;
+```
+
+* `reg var` → registrador mutável.
+* `reg val` → registrador imutável.
+* Usados para cálculos rápidos em loops temporais (`enquanto`).
+
+### Sensores (`sensor`)
+
+Sensores representam valores externos fornecidos pela VM ou ambiente.
+São somente leitura e usados para capturar medidas como vento, luz ou chuva.
+
+```dvl
+sensor vento : int ;
+sensor chuva : float ;
+sensor luz   : int ;
+sensor temp  : float ;
+```
+
+Podem ser usados diretamente em expressões:
+
+```dvl
+se (vento > 80) {
+  mostrar("Vento forte detectado") ;
+}
+```
 
 ---
 
 ## Exemplo de Código
 
-Há dois arquivos de exemplo de utilização de código que podem ser encontrados em [`exemplo_simplificado.dvl`](./exemplo_simplificado.dvl) e [`exemplo_avancado.dvl`](./exemplo_avancado.dvl).
+Os arquivos de exemplo mostram casos práticos de análise temporal:
+
+* [`exemplo_simplificado.dvl`](./exemplo_simplificado.dvl):
+  simulação minuto a minuto, acumulando chuva e exibindo alertas de vento e luminosidade.
+
+* [`exemplo_avancado.dvl`](./exemplo_avancado.dvl):
+  análise de datasets históricos e agregações temporais com janelas de 10 minutos.
+
+---
+
+## Gramática (EBNF)
+
+A gramática completa encontra-se em [`gramatica.ebnf`](./gramatica.ebnf), incluindo:
+
+```
+registrador_decl ::= "reg" ( "val" | "var" ) identificador [ ":" tipo ] ":=" expressao ";" ;
+sensor_decl      ::= "sensor" identificador ":" tipo ";" ;
+```
 
 ---
 
 ## Diferenciais
 
-O DVL não busca competir com linguagens como Python, R ou C, mas sim oferecer uma alternativa **didática e simplificada**, voltada para **análise de dados em contextos acadêmicos e experimentais**.
-Entre os principais diferenciais, destacam-se:
+O DVL não busca competir com linguagens como Python, R ou C, mas oferecer uma alternativa **didática e contextualizada** para **análise de dados temporais** e **simulação de sensores** em ambientes acadêmicos.
 
-**Sintaxe minimalista e em português:**
+**Principais diferenciais:**
 
-* Uso de `;` para encerrar instruções.
-* Palavras-chave claras e acessíveis: `se`, `senao`, `enquanto`, `mostrar`, `ler`.
-* Declarações explícitas com `decl val` e `decl var`.
-
-**Funções estatísticas nativas:**
-
-* `#media`, `#soma`, `#minimo`, `#maximo` incorporadas diretamente à linguagem.
-* Podem operar sobre listas ou colunas de datasets sem importações externas.
-
-**Identidade própria:**
-
-* Comentários em três estilos (`#`, `//`, `/* ... */`).
-* Suporte a `dataset` nativo com acesso direto por coluna (`dados.coluna`).
-* Operador de pipeline `->>` exclusivo, para encadear transformações de dados.
-* Funções definidas pelo usuário com retorno explícito.
-
-Em resumo, o DVL é uma linguagem feita para **aprender, ensinar e explorar conceitos de compiladores e análise de dados**, com uma **sintaxe original, legível e coerente com o português técnico**.
+* Sintaxe totalmente em português, legível e autoexplicativa.
+* Recursos nativos para variáveis temporais (`reg`) e sensores (`sensor`).
+* Operações estatísticas integradas e expressivas (`#media`, `#soma`, etc.).
+* Pipeline de dados (`->>`) para composição e análise de fluxos.
+* Estrutura ideal para ensino de compiladores e linguagens com VM.
 
 ---
 
-## Mudanças Realizadas nesta Versão
+## Em resumo
 
-| Categoria                    | Antes                                           | Agora                                                    |
-| ---------------------------- | ----------------------------------------------- | -------------------------------------------------------- |
-| **Terminador de instruções** | `.` (ponto)                                     | `;` (padrão mais legível)                                |
-| **Palavras-chave**           | Inglês (`if`, `else`, `while`, `print`, `read`) | Português (`se`, `senao`, `enquanto`, `mostrar`, `ler`)  |
-| **Declarações**              | `var nome := valor`                             | `decl val` (imutável) / `decl var` (mutável)             |
-| **Coleções**                 | Somente listas                                  | Listas e `dataset` tabulares com colunas acessíveis      |
-| **Funções estatísticas**     | Prefixadas com `@`                              | Prefixadas com `#`                                       |
-| **Pipeline**                 | Não existia                                     | `->>` para encadear cálculos e filtros                   |
-| **Comentários**              | `//` e `/*...*/`                                | `#`, `//`, e `/*...*/`                                   |
-| **Sintaxe geral**            | Tradução de linguagens como R/C                 | Sintaxe original em português e sem equivalentes diretos |
+O **DVL** é uma linguagem criada para **analisar, simular e compreender comportamentos temporais e ambientais**, oferecendo uma abordagem **didática**, **estatística** e **temporal** dentro de um ecossistema próprio de compilação e execução.
+
+Seu objetivo é unir a clareza de linguagens educacionais à praticidade da análise de dados moderna — com foco em **tempo, sensores e variáveis de estado**.
