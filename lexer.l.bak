@@ -1,0 +1,133 @@
+%option noinput nounput noyywrap yylineno
+
+%{
+#include "parser.tab.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+/* strdup simples */
+static char *sdup(const char *s) {
+  if (!s) return NULL;
+  size_t n = strlen(s);
+  char *r = (char*)malloc(n+1);
+  if (!r) { fprintf(stderr, "out of memory\n"); exit(1); }
+  memcpy(r, s, n+1);
+  return r;
+}
+
+/* consome e ignora comentario de bloco */
+static void skip_block_comment(void) {
+  int c;
+  while ((c = input()) != 0) {
+    if (c == '*') {
+      int c2 = input();
+      if (c2 == '/') return;
+      if (c2 == 0) return;
+      unput(c2);
+    }
+  }
+}
+
+int yywrap(void) { return 1; }
+%}
+
+/* --- definicoes de macros (devem ficar aqui, fora do %{ %} ) --- */
+DIGIT      [0-9]
+LETTER     [A-Za-z]
+ID         {LETTER}({LETTER}|{DIGIT}|_)*
+WS         [ \t\r\n]+
+STRING_CH  [^"\n]
+
+%%
+
+/* whitespace e novas linhas */
+{WS}                                   ;
+
+/* comentarios */
+"#".*                                  ; /* comentario estilo R / DVL: # ... (linha) */
+"//".*                                 ; /* comentario C++ style */
+"/*"                                   { skip_block_comment(); } /* bloco */
+
+/* palavras-chave */
+"decl"                                  { return DECL; }
+"val"                                   { return VAL; }
+"var"                                   { return VAR; }
+"reg"                                   { return REG; }
+"sensor"                                { return SENSOR; }
+"funcao"                                { return FUNC; }
+"dataset"                               { return DATASET; }
+
+"se"                                    { return SE; }
+"senao"                                 { return SENAO; }
+"enquanto"                              { return ENQUANTO; }
+"retorna"                               { return RETORNA; }
+
+"mostrar"                               { return MOSTRAR; }
+"ler"                                   { return LER; }
+
+"int"                                   { return TYPE_INT; }
+"float"                                 { return TYPE_FLOAT; }
+"bool"                                  { return TYPE_BOOL; }
+"string"                                { return TYPE_STRING; }
+"lista"                                 { return TYPE_LISTA; }
+
+"nao"                                   { return NOT; }
+"e"                                     { return AND; }
+"ou"                                    { return OR; }
+
+/* operadores compostos e simbolos (mais longos primeiro) */
+"->>"                                   { return PIPELINE; } /* operador pipeline */
+":="                                    { return ASSIGN; }   /* atribuicao */
+"=="                                    { return EQ; }
+"!="                                    { return NE; }
+"<="                                    { return LE; }
+">="                                    { return GE; }
+"<"                                     { return LT; }
+">"                                     { return GT; }
+
+"("                                     { return LPAREN; }
+")"                                     { return RPAREN; }
+"{"                                     { return LBRACE; }
+"}"                                     { return RBRACE; }
+";"                                     { return SEMI; }
+","                                     { return COMMA; }
+"."                                     { return DOT; }
+
+/* hash para chamadas estatisticas */
+"#"                                     { return HASH; }
+
+/* numeros: inteiros e floats */
+{DIGIT}+("."{DIGIT}+)?([eE][+-]?{DIGIT}+)? {
+    yylval.real = atof(yytext);  /* ajuste se seu YYSTYPE for diferente */
+    return NUMBER;
+}
+
+/* strings simples entre aspas (sem suporte avancado a escapes) */
+\"{STRING_CH}*\"                        {
+    int len = strlen(yytext);
+    if (len >= 2) {
+      char *s = (char*)malloc(len-1);
+      if (!s) { fprintf(stderr, "out of memory\n"); exit(1); }
+      memcpy(s, yytext+1, len-2);
+      s[len-2] = '\0';
+      yylval.str = s;
+    } else {
+      yylval.str = sdup("");
+    }
+    return STRING;
+}
+
+/* identificadores */
+{ID}                                    {
+    yylval.str = sdup(yytext);
+    return IDENT;
+}
+
+/* erro lexical */
+.                                       {
+    fprintf(stderr, "Lexical error at line %d: unexpected '%s'\n", yylineno, yytext);
+    return ERROR;
+}
+
+%%
