@@ -1,0 +1,4 @@
+decl val x := 42;
+decl val y := 10;
+decl val soma := x + y;
+mostrar("Resultado:", soma);

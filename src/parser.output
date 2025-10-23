@@ -1,0 +1,2910 @@
+Terminals unused in grammar
+
+    LEX_ERROR
+
+
+Grammar
+
+    0 $accept: programa $end
+
+    1 programa: unidades
+
+    2 unidades: ε
+    3         | unidades unidade
+
+    4 unidade: declaracao
+    5        | comando
+
+    6 declaracao: decl_variavel
+    7           | decl_funcao
+    8           | decl_dataset
+    9           | registrador_decl
+   10           | sensor_decl
+
+   11 decl_variavel: DECL VAL identificador opt_tipo ASSIGN expressao SEMI
+   12              | DECL VAR identificador opt_tipo ASSIGN expressao SEMI
+
+   13 registrador_decl: REG VAL identificador opt_tipo ASSIGN expressao SEMI
+   14                 | REG VAR identificador opt_tipo ASSIGN expressao SEMI
+
+   15 sensor_decl: SENSOR identificador COLON tipo SEMI
+
+   16 opt_tipo: ε
+   17         | COLON tipo
+
+   18 tipo: INT_TYPE
+   19     | FLOAT_TYPE
+   20     | BOOL_TYPE
+   21     | STRING_TYPE
+   22     | LIST_TYPE
+
+   23 decl_funcao: FUNC identificador LPAREN opt_lista_parametros RPAREN bloco
+
+   24 opt_lista_parametros: ε
+   25                     | lista_parametros
+
+   26 lista_parametros: identificador
+   27                 | lista_parametros COMMA identificador
+
+   28 decl_dataset: DATASET STRING_LITERAL LBRACE campos_dataset RBRACE SEMI
+
+   29 campos_dataset: campo_dataset
+   30               | campos_dataset COMMA campo_dataset
+
+   31 campo_dataset: identificador COLON lista
+
+   32 comando: atribuicao
+   33        | mostrar
+   34        | ler
+   35        | se_senao
+   36        | enquanto
+   37        | retorno
+   38        | bloco
+   39        | expressao SEMI
+   40        | error SEMI
+
+   41 atribuicao: identificador ASSIGN expressao SEMI
+
+   42 mostrar: MOSTRAR LPAREN lista_generica_expressoes RPAREN SEMI
+
+   43 ler: identificador ASSIGN LER LPAREN RPAREN SEMI
+
+   44 retorno: RETORNA expressao SEMI
+
+   45 se_senao: SE LPAREN expressao RPAREN bloco opt_senao
+
+   46 opt_senao: ε
+   47          | SENAO bloco
+
+   48 enquanto: ENQUANTO LPAREN expressao RPAREN bloco
+
+   49 bloco: LBRACE bloco_conteudo RBRACE
+
+   50 bloco_conteudo: ε
+   51               | bloco_conteudo_item_list
+
+   52 bloco_conteudo_item_list: bloco_conteudo_item
+   53                         | bloco_conteudo_item_list bloco_conteudo_item
+
+   54 bloco_conteudo_item: declaracao
+   55                    | comando
+
+   56 expressao: logico_ou
+
+   57 logico_ou: logico_e
+   58          | logico_ou OR logico_e
+
+   59 logico_e: igualdade
+   60         | logico_e AND igualdade
+
+   61 igualdade: relacional
+   62          | igualdade EQ relacional
+   63          | igualdade NE relacional
+
+   64 relacional: aditiva
+   65           | relacional LT aditiva
+   66           | relacional GT aditiva
+   67           | relacional LE aditiva
+   68           | relacional GE aditiva
+
+   69 aditiva: multiplicativa
+   70        | aditiva '+' multiplicativa
+   71        | aditiva '-' multiplicativa
+
+   72 multiplicativa: unaria
+   73               | multiplicativa '*' unaria
+   74               | multiplicativa '/' unaria
+   75               | multiplicativa '%' unaria
+
+   76 unaria: NOT unaria
+   77       | '-' unaria
+   78       | pipeline
+
+   79 pipeline: aplicacao
+   80         | pipeline PIPE aplicacao
+
+   81 aplicacao: primario
+   82          | aplicacao LPAREN opt_lista_generica_expressoes RPAREN
+   83          | aplicacao DOT IDENT
+
+   84 opt_lista_generica_expressoes: ε
+   85                              | expressao
+   86                              | lista_generica_expressoes
+
+   87 lista_generica_expressoes: expressao COMMA expressao
+   88                          | lista_generica_expressoes COMMA expressao
+
+   89 primario: INT_LITERAL
+   90         | FLOAT_LITERAL
+   91         | STRING_LITERAL
+   92         | identificador
+   93         | LPAREN expressao RPAREN
+   94         | lista
+   95         | tabela
+   96         | chamada_estatistica
+
+   97 lista: LBRACKET opt_lista_generica_expressoes RBRACKET
+
+   98 tabela: LBRACE campos_tabela RBRACE
+
+   99 campos_tabela: campo_tabela
+  100              | campos_tabela COMMA campo_tabela
+
+  101 campo_tabela: identificador COLON lista
+
+  102 chamada_estatistica: STAT_NAME LPAREN opt_lista_generica_expressoes RPAREN
+
+  103 identificador: IDENT
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    '%' (37) 75
+    '*' (42) 73
+    '+' (43) 70
+    '-' (45) 71 77
+    '/' (47) 74
+    error (256) 40
+    DECL (258) 11 12
+    VAL (259) 11 13
+    VAR (260) 12 14
+    REG (261) 13 14
+    SENSOR (262) 15
+    FUNC (263) 23
+    RETORNA (264) 44
+    DATASET (265) 28
+    MOSTRAR (266) 42
+    LER (267) 43
+    SE (268) 45
+    SENAO (269) 47
+    ENQUANTO (270) 48
+    AND (271) 60
+    OR (272) 58
+    NOT (273) 76
+    INT_TYPE (274) 18
+    FLOAT_TYPE (275) 19
+    BOOL_TYPE (276) 20
+    STRING_TYPE (277) 21
+    LIST_TYPE (278) 22
+    EQ (279) 62
+    NE (280) 63
+    LE (281) 67
+    GE (282) 68
+    LT (283) 65
+    GT (284) 66
+    ASSIGN (285) 11 12 13 14 41 43
+    PIPE (286) 80
+    SEMI (287) 11 12 13 14 15 28 39 40 41 42 43 44
+    COMMA (288) 27 30 87 88 100
+    COLON (289) 15 17 31 101
+    LPAREN (290) 23 42 43 45 48 82 93 102
+    RPAREN (291) 23 42 43 45 48 82 93 102
+    LBRACE (292) 28 49 98
+    RBRACE (293) 28 49 98
+    LBRACKET (294) 97
+    RBRACKET (295) 97
+    DOT (296) 83
+    INT_LITERAL <ival> (297) 89
+    FLOAT_LITERAL <fval> (298) 90
+    STRING_LITERAL <sval> (299) 28 91
+    STAT_NAME <sval> (300) 102
+    IDENT <sval> (301) 83 103
+    LEX_ERROR (302)
+    UMINUS (303)
+
+
+Nonterminals, with rules where they appear
+
+    $accept (54)
+        on left: 0
+    programa (55)
+        on left: 1
+        on right: 0
+    unidades (56)
+        on left: 2 3
+        on right: 1 3
+    unidade (57)
+        on left: 4 5
+        on right: 3
+    declaracao (58)
+        on left: 6 7 8 9 10
+        on right: 4 54
+    decl_variavel (59)
+        on left: 11 12
+        on right: 6
+    registrador_decl (60)
+        on left: 13 14
+        on right: 9
+    sensor_decl (61)
+        on left: 15
+        on right: 10
+    opt_tipo (62)
+        on left: 16 17
+        on right: 11 12 13 14
+    tipo (63)
+        on left: 18 19 20 21 22
+        on right: 15 17
+    decl_funcao (64)
+        on left: 23
+        on right: 7
+    opt_lista_parametros (65)
+        on left: 24 25
+        on right: 23
+    lista_parametros (66)
+        on left: 26 27
+        on right: 25 27
+    decl_dataset (67)
+        on left: 28
+        on right: 8
+    campos_dataset (68)
+        on left: 29 30
+        on right: 28 30
+    campo_dataset (69)
+        on left: 31
+        on right: 29 30
+    comando (70)
+        on left: 32 33 34 35 36 37 38 39 40
+        on right: 5 55
+    atribuicao (71)
+        on left: 41
+        on right: 32
+    mostrar (72)
+        on left: 42
+        on right: 33
+    ler (73)
+        on left: 43
+        on right: 34
+    retorno (74)
+        on left: 44
+        on right: 37
+    se_senao (75)
+        on left: 45
+        on right: 35
+    opt_senao (76)
+        on left: 46 47
+        on right: 45
+    enquanto (77)
+        on left: 48
+        on right: 36
+    bloco (78)
+        on left: 49
+        on right: 23 38 45 47 48
+    bloco_conteudo (79)
+        on left: 50 51
+        on right: 49
+    bloco_conteudo_item_list (80)
+        on left: 52 53
+        on right: 51 53
+    bloco_conteudo_item (81)
+        on left: 54 55
+        on right: 52 53
+    expressao <sval> (82)
+        on left: 56
+        on right: 11 12 13 14 39 41 44 45 48 85 87 88 93
+    logico_ou <sval> (83)
+        on left: 57 58
+        on right: 56 58
+    logico_e <sval> (84)
+        on left: 59 60
+        on right: 57 58 60
+    igualdade <sval> (85)
+        on left: 61 62 63
+        on right: 59 60 62 63
+    relacional <sval> (86)
+        on left: 64 65 66 67 68
+        on right: 61 62 63 65 66 67 68
+    aditiva <sval> (87)
+        on left: 69 70 71
+        on right: 64 65 66 67 68 70 71
+    multiplicativa <sval> (88)
+        on left: 72 73 74 75
+        on right: 69 70 71 73 74 75
+    unaria <sval> (89)
+        on left: 76 77 78
+        on right: 72 73 74 75 76 77
+    pipeline <sval> (90)
+        on left: 79 80
+        on right: 78 80
+    aplicacao <sval> (91)
+        on left: 81 82 83
+        on right: 79 80 82 83
+    opt_lista_generica_expressoes <sval> (92)
+        on left: 84 85 86
+        on right: 82 97 102
+    lista_generica_expressoes <sval> (93)
+        on left: 87 88
+        on right: 42 86 88
+    primario <sval> (94)
+        on left: 89 90 91 92 93 94 95 96
+        on right: 81
+    lista <sval> (95)
+        on left: 97
+        on right: 31 94 101
+    tabela <sval> (96)
+        on left: 98
+        on right: 95
+    campos_tabela <sval> (97)
+        on left: 99 100
+        on right: 98 100
+    campo_tabela <sval> (98)
+        on left: 101
+        on right: 99 100
+    chamada_estatistica <sval> (99)
+        on left: 102
+        on right: 96
+    identificador <sval> (100)
+        on left: 103
+        on right: 11 12 13 14 15 23 26 27 31 41 43 92 101
+
+
+State 0
+
+    0 $accept: • programa $end
+
+    $default  reduce using rule 2 (unidades)
+
+    programa  go to state 1
+    unidades  go to state 2
+
+
+State 1
+
+    0 $accept: programa • $end
+
+    $end  shift, and go to state 3
+
+
+State 2
+
+    1 programa: unidades •
+    3 unidades: unidades • unidade
+
+    error           shift, and go to state 4
+    DECL            shift, and go to state 5
+    REG             shift, and go to state 6
+    SENSOR          shift, and go to state 7
+    FUNC            shift, and go to state 8
+    RETORNA         shift, and go to state 9
+    DATASET         shift, and go to state 10
+    MOSTRAR         shift, and go to state 11
+    SE              shift, and go to state 12
+    ENQUANTO        shift, and go to state 13
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 16
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    $end  reduce using rule 1 (programa)
+
+    unidade              go to state 24
+    declaracao           go to state 25
+    decl_variavel        go to state 26
+    registrador_decl     go to state 27
+    sensor_decl          go to state 28
+    decl_funcao          go to state 29
+    decl_dataset         go to state 30
+    comando              go to state 31
+    atribuicao           go to state 32
+    mostrar              go to state 33
+    ler                  go to state 34
+    retorno              go to state 35
+    se_senao             go to state 36
+    enquanto             go to state 37
+    bloco                go to state 38
+    expressao            go to state 39
+    logico_ou            go to state 40
+    logico_e             go to state 41
+    igualdade            go to state 42
+    relacional           go to state 43
+    aditiva              go to state 44
+    multiplicativa       go to state 45
+    unaria               go to state 46
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 53
+
+
+State 3
+
+    0 $accept: programa $end •
+
+    $default  accept
+
+
+State 4
+
+   40 comando: error • SEMI
+
+    SEMI  shift, and go to state 54
+
+
+State 5
+
+   11 decl_variavel: DECL • VAL identificador opt_tipo ASSIGN expressao SEMI
+   12              | DECL • VAR identificador opt_tipo ASSIGN expressao SEMI
+
+    VAL  shift, and go to state 55
+    VAR  shift, and go to state 56
+
+
+State 6
+
+   13 registrador_decl: REG • VAL identificador opt_tipo ASSIGN expressao SEMI
+   14                 | REG • VAR identificador opt_tipo ASSIGN expressao SEMI
+
+    VAL  shift, and go to state 57
+    VAR  shift, and go to state 58
+
+
+State 7
+
+   15 sensor_decl: SENSOR • identificador COLON tipo SEMI
+
+    IDENT  shift, and go to state 22
+
+    identificador  go to state 59
+
+
+State 8
+
+   23 decl_funcao: FUNC • identificador LPAREN opt_lista_parametros RPAREN bloco
+
+    IDENT  shift, and go to state 22
+
+    identificador  go to state 60
+
+
+State 9
+
+   44 retorno: RETORNA • expressao SEMI
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    expressao            go to state 62
+    logico_ou            go to state 40
+    logico_e             go to state 41
+    igualdade            go to state 42
+    relacional           go to state 43
+    aditiva              go to state 44
+    multiplicativa       go to state 45
+    unaria               go to state 46
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 10
+
+   28 decl_dataset: DATASET • STRING_LITERAL LBRACE campos_dataset RBRACE SEMI
+
+    STRING_LITERAL  shift, and go to state 64
+
+
+State 11
+
+   42 mostrar: MOSTRAR • LPAREN lista_generica_expressoes RPAREN SEMI
+
+    LPAREN  shift, and go to state 65
+
+
+State 12
+
+   45 se_senao: SE • LPAREN expressao RPAREN bloco opt_senao
+
+    LPAREN  shift, and go to state 66
+
+
+State 13
+
+   48 enquanto: ENQUANTO • LPAREN expressao RPAREN bloco
+
+    LPAREN  shift, and go to state 67
+
+
+State 14
+
+   76 unaria: NOT • unaria
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    unaria               go to state 68
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 15
+
+   93 primario: LPAREN • expressao RPAREN
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    expressao            go to state 69
+    logico_ou            go to state 40
+    logico_e             go to state 41
+    igualdade            go to state 42
+    relacional           go to state 43
+    aditiva              go to state 44
+    multiplicativa       go to state 45
+    unaria               go to state 46
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 16
+
+   49 bloco: LBRACE • bloco_conteudo RBRACE
+   98 tabela: LBRACE • campos_tabela RBRACE
+
+    error           shift, and go to state 4
+    DECL            shift, and go to state 5
+    REG             shift, and go to state 6
+    SENSOR          shift, and go to state 7
+    FUNC            shift, and go to state 8
+    RETORNA         shift, and go to state 9
+    DATASET         shift, and go to state 10
+    MOSTRAR         shift, and go to state 11
+    SE              shift, and go to state 12
+    ENQUANTO        shift, and go to state 13
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 16
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    RBRACE  reduce using rule 50 (bloco_conteudo)
+
+    declaracao                go to state 70
+    decl_variavel             go to state 26
+    registrador_decl          go to state 27
+    sensor_decl               go to state 28
+    decl_funcao               go to state 29
+    decl_dataset              go to state 30
+    comando                   go to state 71
+    atribuicao                go to state 32
+    mostrar                   go to state 33
+    ler                       go to state 34
+    retorno                   go to state 35
+    se_senao                  go to state 36
+    enquanto                  go to state 37
+    bloco                     go to state 38
+    bloco_conteudo            go to state 72
+    bloco_conteudo_item_list  go to state 73
+    bloco_conteudo_item       go to state 74
+    expressao                 go to state 39
+    logico_ou                 go to state 40
+    logico_e                  go to state 41
+    igualdade                 go to state 42
+    relacional                go to state 43
+    aditiva                   go to state 44
+    multiplicativa            go to state 45
+    unaria                    go to state 46
+    pipeline                  go to state 47
+    aplicacao                 go to state 48
+    primario                  go to state 49
+    lista                     go to state 50
+    tabela                    go to state 51
+    campos_tabela             go to state 75
+    campo_tabela              go to state 76
+    chamada_estatistica       go to state 52
+    identificador             go to state 77
+
+
+State 17
+
+   97 lista: LBRACKET • opt_lista_generica_expressoes RBRACKET
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    $default  reduce using rule 84 (opt_lista_generica_expressoes)
+
+    expressao                      go to state 78
+    logico_ou                      go to state 40
+    logico_e                       go to state 41
+    igualdade                      go to state 42
+    relacional                     go to state 43
+    aditiva                        go to state 44
+    multiplicativa                 go to state 45
+    unaria                         go to state 46
+    pipeline                       go to state 47
+    aplicacao                      go to state 48
+    opt_lista_generica_expressoes  go to state 79
+    lista_generica_expressoes      go to state 80
+    primario                       go to state 49
+    lista                          go to state 50
+    tabela                         go to state 51
+    chamada_estatistica            go to state 52
+    identificador                  go to state 63
+
+
+State 18
+
+   89 primario: INT_LITERAL •
+
+    $default  reduce using rule 89 (primario)
+
+
+State 19
+
+   90 primario: FLOAT_LITERAL •
+
+    $default  reduce using rule 90 (primario)
+
+
+State 20
+
+   91 primario: STRING_LITERAL •
+
+    $default  reduce using rule 91 (primario)
+
+
+State 21
+
+  102 chamada_estatistica: STAT_NAME • LPAREN opt_lista_generica_expressoes RPAREN
+
+    LPAREN  shift, and go to state 81
+
+
+State 22
+
+  103 identificador: IDENT •
+
+    $default  reduce using rule 103 (identificador)
+
+
+State 23
+
+   77 unaria: '-' • unaria
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    unaria               go to state 82
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 24
+
+    3 unidades: unidades unidade •
+
+    $default  reduce using rule 3 (unidades)
+
+
+State 25
+
+    4 unidade: declaracao •
+
+    $default  reduce using rule 4 (unidade)
+
+
+State 26
+
+    6 declaracao: decl_variavel •
+
+    $default  reduce using rule 6 (declaracao)
+
+
+State 27
+
+    9 declaracao: registrador_decl •
+
+    $default  reduce using rule 9 (declaracao)
+
+
+State 28
+
+   10 declaracao: sensor_decl •
+
+    $default  reduce using rule 10 (declaracao)
+
+
+State 29
+
+    7 declaracao: decl_funcao •
+
+    $default  reduce using rule 7 (declaracao)
+
+
+State 30
+
+    8 declaracao: decl_dataset •
+
+    $default  reduce using rule 8 (declaracao)
+
+
+State 31
+
+    5 unidade: comando •
+
+    $default  reduce using rule 5 (unidade)
+
+
+State 32
+
+   32 comando: atribuicao •
+
+    $default  reduce using rule 32 (comando)
+
+
+State 33
+
+   33 comando: mostrar •
+
+    $default  reduce using rule 33 (comando)
+
+
+State 34
+
+   34 comando: ler •
+
+    $default  reduce using rule 34 (comando)
+
+
+State 35
+
+   37 comando: retorno •
+
+    $default  reduce using rule 37 (comando)
+
+
+State 36
+
+   35 comando: se_senao •
+
+    $default  reduce using rule 35 (comando)
+
+
+State 37
+
+   36 comando: enquanto •
+
+    $default  reduce using rule 36 (comando)
+
+
+State 38
+
+   38 comando: bloco •
+
+    $default  reduce using rule 38 (comando)
+
+
+State 39
+
+   39 comando: expressao • SEMI
+
+    SEMI  shift, and go to state 83
+
+
+State 40
+
+   56 expressao: logico_ou •
+   58 logico_ou: logico_ou • OR logico_e
+
+    OR  shift, and go to state 84
+
+    $default  reduce using rule 56 (expressao)
+
+
+State 41
+
+   57 logico_ou: logico_e •
+   60 logico_e: logico_e • AND igualdade
+
+    AND  shift, and go to state 85
+
+    $default  reduce using rule 57 (logico_ou)
+
+
+State 42
+
+   59 logico_e: igualdade •
+   62 igualdade: igualdade • EQ relacional
+   63          | igualdade • NE relacional
+
+    EQ  shift, and go to state 86
+    NE  shift, and go to state 87
+
+    $default  reduce using rule 59 (logico_e)
+
+
+State 43
+
+   61 igualdade: relacional •
+   65 relacional: relacional • LT aditiva
+   66           | relacional • GT aditiva
+   67           | relacional • LE aditiva
+   68           | relacional • GE aditiva
+
+    LE  shift, and go to state 88
+    GE  shift, and go to state 89
+    LT  shift, and go to state 90
+    GT  shift, and go to state 91
+
+    $default  reduce using rule 61 (igualdade)
+
+
+State 44
+
+   64 relacional: aditiva •
+   70 aditiva: aditiva • '+' multiplicativa
+   71        | aditiva • '-' multiplicativa
+
+    '+'  shift, and go to state 92
+    '-'  shift, and go to state 93
+
+    $default  reduce using rule 64 (relacional)
+
+
+State 45
+
+   69 aditiva: multiplicativa •
+   73 multiplicativa: multiplicativa • '*' unaria
+   74               | multiplicativa • '/' unaria
+   75               | multiplicativa • '%' unaria
+
+    '*'  shift, and go to state 94
+    '/'  shift, and go to state 95
+    '%'  shift, and go to state 96
+
+    $default  reduce using rule 69 (aditiva)
+
+
+State 46
+
+   72 multiplicativa: unaria •
+
+    $default  reduce using rule 72 (multiplicativa)
+
+
+State 47
+
+   78 unaria: pipeline •
+   80 pipeline: pipeline • PIPE aplicacao
+
+    PIPE  shift, and go to state 97
+
+    $default  reduce using rule 78 (unaria)
+
+
+State 48
+
+   79 pipeline: aplicacao •
+   82 aplicacao: aplicacao • LPAREN opt_lista_generica_expressoes RPAREN
+   83          | aplicacao • DOT IDENT
+
+    LPAREN  shift, and go to state 98
+    DOT     shift, and go to state 99
+
+    $default  reduce using rule 79 (pipeline)
+
+
+State 49
+
+   81 aplicacao: primario •
+
+    $default  reduce using rule 81 (aplicacao)
+
+
+State 50
+
+   94 primario: lista •
+
+    $default  reduce using rule 94 (primario)
+
+
+State 51
+
+   95 primario: tabela •
+
+    $default  reduce using rule 95 (primario)
+
+
+State 52
+
+   96 primario: chamada_estatistica •
+
+    $default  reduce using rule 96 (primario)
+
+
+State 53
+
+   41 atribuicao: identificador • ASSIGN expressao SEMI
+   43 ler: identificador • ASSIGN LER LPAREN RPAREN SEMI
+   92 primario: identificador •
+
+    ASSIGN  shift, and go to state 100
+
+    $default  reduce using rule 92 (primario)
+
+
+State 54
+
+   40 comando: error SEMI •
+
+    $default  reduce using rule 40 (comando)
+
+
+State 55
+
+   11 decl_variavel: DECL VAL • identificador opt_tipo ASSIGN expressao SEMI
+
+    IDENT  shift, and go to state 22
+
+    identificador  go to state 101
+
+
+State 56
+
+   12 decl_variavel: DECL VAR • identificador opt_tipo ASSIGN expressao SEMI
+
+    IDENT  shift, and go to state 22
+
+    identificador  go to state 102
+
+
+State 57
+
+   13 registrador_decl: REG VAL • identificador opt_tipo ASSIGN expressao SEMI
+
+    IDENT  shift, and go to state 22
+
+    identificador  go to state 103
+
+
+State 58
+
+   14 registrador_decl: REG VAR • identificador opt_tipo ASSIGN expressao SEMI
+
+    IDENT  shift, and go to state 22
+
+    identificador  go to state 104
+
+
+State 59
+
+   15 sensor_decl: SENSOR identificador • COLON tipo SEMI
+
+    COLON  shift, and go to state 105
+
+
+State 60
+
+   23 decl_funcao: FUNC identificador • LPAREN opt_lista_parametros RPAREN bloco
+
+    LPAREN  shift, and go to state 106
+
+
+State 61
+
+   98 tabela: LBRACE • campos_tabela RBRACE
+
+    IDENT  shift, and go to state 22
+
+    campos_tabela  go to state 75
+    campo_tabela   go to state 76
+    identificador  go to state 107
+
+
+State 62
+
+   44 retorno: RETORNA expressao • SEMI
+
+    SEMI  shift, and go to state 108
+
+
+State 63
+
+   92 primario: identificador •
+
+    $default  reduce using rule 92 (primario)
+
+
+State 64
+
+   28 decl_dataset: DATASET STRING_LITERAL • LBRACE campos_dataset RBRACE SEMI
+
+    LBRACE  shift, and go to state 109
+
+
+State 65
+
+   42 mostrar: MOSTRAR LPAREN • lista_generica_expressoes RPAREN SEMI
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    expressao                  go to state 110
+    logico_ou                  go to state 40
+    logico_e                   go to state 41
+    igualdade                  go to state 42
+    relacional                 go to state 43
+    aditiva                    go to state 44
+    multiplicativa             go to state 45
+    unaria                     go to state 46
+    pipeline                   go to state 47
+    aplicacao                  go to state 48
+    lista_generica_expressoes  go to state 111
+    primario                   go to state 49
+    lista                      go to state 50
+    tabela                     go to state 51
+    chamada_estatistica        go to state 52
+    identificador              go to state 63
+
+
+State 66
+
+   45 se_senao: SE LPAREN • expressao RPAREN bloco opt_senao
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    expressao            go to state 112
+    logico_ou            go to state 40
+    logico_e             go to state 41
+    igualdade            go to state 42
+    relacional           go to state 43
+    aditiva              go to state 44
+    multiplicativa       go to state 45
+    unaria               go to state 46
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 67
+
+   48 enquanto: ENQUANTO LPAREN • expressao RPAREN bloco
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    expressao            go to state 113
+    logico_ou            go to state 40
+    logico_e             go to state 41
+    igualdade            go to state 42
+    relacional           go to state 43
+    aditiva              go to state 44
+    multiplicativa       go to state 45
+    unaria               go to state 46
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 68
+
+   76 unaria: NOT unaria •
+
+    $default  reduce using rule 76 (unaria)
+
+
+State 69
+
+   93 primario: LPAREN expressao • RPAREN
+
+    RPAREN  shift, and go to state 114
+
+
+State 70
+
+   54 bloco_conteudo_item: declaracao •
+
+    $default  reduce using rule 54 (bloco_conteudo_item)
+
+
+State 71
+
+   55 bloco_conteudo_item: comando •
+
+    $default  reduce using rule 55 (bloco_conteudo_item)
+
+
+State 72
+
+   49 bloco: LBRACE bloco_conteudo • RBRACE
+
+    RBRACE  shift, and go to state 115
+
+
+State 73
+
+   51 bloco_conteudo: bloco_conteudo_item_list •
+   53 bloco_conteudo_item_list: bloco_conteudo_item_list • bloco_conteudo_item
+
+    error           shift, and go to state 4
+    DECL            shift, and go to state 5
+    REG             shift, and go to state 6
+    SENSOR          shift, and go to state 7
+    FUNC            shift, and go to state 8
+    RETORNA         shift, and go to state 9
+    DATASET         shift, and go to state 10
+    MOSTRAR         shift, and go to state 11
+    SE              shift, and go to state 12
+    ENQUANTO        shift, and go to state 13
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 16
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    RBRACE  reduce using rule 51 (bloco_conteudo)
+
+    declaracao           go to state 70
+    decl_variavel        go to state 26
+    registrador_decl     go to state 27
+    sensor_decl          go to state 28
+    decl_funcao          go to state 29
+    decl_dataset         go to state 30
+    comando              go to state 71
+    atribuicao           go to state 32
+    mostrar              go to state 33
+    ler                  go to state 34
+    retorno              go to state 35
+    se_senao             go to state 36
+    enquanto             go to state 37
+    bloco                go to state 38
+    bloco_conteudo_item  go to state 116
+    expressao            go to state 39
+    logico_ou            go to state 40
+    logico_e             go to state 41
+    igualdade            go to state 42
+    relacional           go to state 43
+    aditiva              go to state 44
+    multiplicativa       go to state 45
+    unaria               go to state 46
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 53
+
+
+State 74
+
+   52 bloco_conteudo_item_list: bloco_conteudo_item •
+
+    $default  reduce using rule 52 (bloco_conteudo_item_list)
+
+
+State 75
+
+   98 tabela: LBRACE campos_tabela • RBRACE
+  100 campos_tabela: campos_tabela • COMMA campo_tabela
+
+    COMMA   shift, and go to state 117
+    RBRACE  shift, and go to state 118
+
+
+State 76
+
+   99 campos_tabela: campo_tabela •
+
+    $default  reduce using rule 99 (campos_tabela)
+
+
+State 77
+
+   41 atribuicao: identificador • ASSIGN expressao SEMI
+   43 ler: identificador • ASSIGN LER LPAREN RPAREN SEMI
+   92 primario: identificador •
+  101 campo_tabela: identificador • COLON lista
+
+    ASSIGN  shift, and go to state 100
+    COLON   shift, and go to state 119
+
+    $default  reduce using rule 92 (primario)
+
+
+State 78
+
+   85 opt_lista_generica_expressoes: expressao •
+   87 lista_generica_expressoes: expressao • COMMA expressao
+
+    COMMA  shift, and go to state 120
+
+    $default  reduce using rule 85 (opt_lista_generica_expressoes)
+
+
+State 79
+
+   97 lista: LBRACKET opt_lista_generica_expressoes • RBRACKET
+
+    RBRACKET  shift, and go to state 121
+
+
+State 80
+
+   86 opt_lista_generica_expressoes: lista_generica_expressoes •
+   88 lista_generica_expressoes: lista_generica_expressoes • COMMA expressao
+
+    COMMA  shift, and go to state 122
+
+    $default  reduce using rule 86 (opt_lista_generica_expressoes)
+
+
+State 81
+
+  102 chamada_estatistica: STAT_NAME LPAREN • opt_lista_generica_expressoes RPAREN
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    $default  reduce using rule 84 (opt_lista_generica_expressoes)
+
+    expressao                      go to state 78
+    logico_ou                      go to state 40
+    logico_e                       go to state 41
+    igualdade                      go to state 42
+    relacional                     go to state 43
+    aditiva                        go to state 44
+    multiplicativa                 go to state 45
+    unaria                         go to state 46
+    pipeline                       go to state 47
+    aplicacao                      go to state 48
+    opt_lista_generica_expressoes  go to state 123
+    lista_generica_expressoes      go to state 80
+    primario                       go to state 49
+    lista                          go to state 50
+    tabela                         go to state 51
+    chamada_estatistica            go to state 52
+    identificador                  go to state 63
+
+
+State 82
+
+   77 unaria: '-' unaria •
+
+    $default  reduce using rule 77 (unaria)
+
+
+State 83
+
+   39 comando: expressao SEMI •
+
+    $default  reduce using rule 39 (comando)
+
+
+State 84
+
+   58 logico_ou: logico_ou OR • logico_e
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    logico_e             go to state 124
+    igualdade            go to state 42
+    relacional           go to state 43
+    aditiva              go to state 44
+    multiplicativa       go to state 45
+    unaria               go to state 46
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 85
+
+   60 logico_e: logico_e AND • igualdade
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    igualdade            go to state 125
+    relacional           go to state 43
+    aditiva              go to state 44
+    multiplicativa       go to state 45
+    unaria               go to state 46
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 86
+
+   62 igualdade: igualdade EQ • relacional
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    relacional           go to state 126
+    aditiva              go to state 44
+    multiplicativa       go to state 45
+    unaria               go to state 46
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 87
+
+   63 igualdade: igualdade NE • relacional
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    relacional           go to state 127
+    aditiva              go to state 44
+    multiplicativa       go to state 45
+    unaria               go to state 46
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 88
+
+   67 relacional: relacional LE • aditiva
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    aditiva              go to state 128
+    multiplicativa       go to state 45
+    unaria               go to state 46
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 89
+
+   68 relacional: relacional GE • aditiva
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    aditiva              go to state 129
+    multiplicativa       go to state 45
+    unaria               go to state 46
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 90
+
+   65 relacional: relacional LT • aditiva
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    aditiva              go to state 130
+    multiplicativa       go to state 45
+    unaria               go to state 46
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 91
+
+   66 relacional: relacional GT • aditiva
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    aditiva              go to state 131
+    multiplicativa       go to state 45
+    unaria               go to state 46
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 92
+
+   70 aditiva: aditiva '+' • multiplicativa
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    multiplicativa       go to state 132
+    unaria               go to state 46
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 93
+
+   71 aditiva: aditiva '-' • multiplicativa
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    multiplicativa       go to state 133
+    unaria               go to state 46
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 94
+
+   73 multiplicativa: multiplicativa '*' • unaria
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    unaria               go to state 134
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 95
+
+   74 multiplicativa: multiplicativa '/' • unaria
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    unaria               go to state 135
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 96
+
+   75 multiplicativa: multiplicativa '%' • unaria
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    unaria               go to state 136
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 97
+
+   80 pipeline: pipeline PIPE • aplicacao
+
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+
+    aplicacao            go to state 137
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 98
+
+   82 aplicacao: aplicacao LPAREN • opt_lista_generica_expressoes RPAREN
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    $default  reduce using rule 84 (opt_lista_generica_expressoes)
+
+    expressao                      go to state 78
+    logico_ou                      go to state 40
+    logico_e                       go to state 41
+    igualdade                      go to state 42
+    relacional                     go to state 43
+    aditiva                        go to state 44
+    multiplicativa                 go to state 45
+    unaria                         go to state 46
+    pipeline                       go to state 47
+    aplicacao                      go to state 48
+    opt_lista_generica_expressoes  go to state 138
+    lista_generica_expressoes      go to state 80
+    primario                       go to state 49
+    lista                          go to state 50
+    tabela                         go to state 51
+    chamada_estatistica            go to state 52
+    identificador                  go to state 63
+
+
+State 99
+
+   83 aplicacao: aplicacao DOT • IDENT
+
+    IDENT  shift, and go to state 139
+
+
+State 100
+
+   41 atribuicao: identificador ASSIGN • expressao SEMI
+   43 ler: identificador ASSIGN • LER LPAREN RPAREN SEMI
+
+    LER             shift, and go to state 140
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    expressao            go to state 141
+    logico_ou            go to state 40
+    logico_e             go to state 41
+    igualdade            go to state 42
+    relacional           go to state 43
+    aditiva              go to state 44
+    multiplicativa       go to state 45
+    unaria               go to state 46
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 101
+
+   11 decl_variavel: DECL VAL identificador • opt_tipo ASSIGN expressao SEMI
+
+    COLON  shift, and go to state 142
+
+    $default  reduce using rule 16 (opt_tipo)
+
+    opt_tipo  go to state 143
+
+
+State 102
+
+   12 decl_variavel: DECL VAR identificador • opt_tipo ASSIGN expressao SEMI
+
+    COLON  shift, and go to state 142
+
+    $default  reduce using rule 16 (opt_tipo)
+
+    opt_tipo  go to state 144
+
+
+State 103
+
+   13 registrador_decl: REG VAL identificador • opt_tipo ASSIGN expressao SEMI
+
+    COLON  shift, and go to state 142
+
+    $default  reduce using rule 16 (opt_tipo)
+
+    opt_tipo  go to state 145
+
+
+State 104
+
+   14 registrador_decl: REG VAR identificador • opt_tipo ASSIGN expressao SEMI
+
+    COLON  shift, and go to state 142
+
+    $default  reduce using rule 16 (opt_tipo)
+
+    opt_tipo  go to state 146
+
+
+State 105
+
+   15 sensor_decl: SENSOR identificador COLON • tipo SEMI
+
+    INT_TYPE     shift, and go to state 147
+    FLOAT_TYPE   shift, and go to state 148
+    BOOL_TYPE    shift, and go to state 149
+    STRING_TYPE  shift, and go to state 150
+    LIST_TYPE    shift, and go to state 151
+
+    tipo  go to state 152
+
+
+State 106
+
+   23 decl_funcao: FUNC identificador LPAREN • opt_lista_parametros RPAREN bloco
+
+    IDENT  shift, and go to state 22
+
+    $default  reduce using rule 24 (opt_lista_parametros)
+
+    opt_lista_parametros  go to state 153
+    lista_parametros      go to state 154
+    identificador         go to state 155
+
+
+State 107
+
+  101 campo_tabela: identificador • COLON lista
+
+    COLON  shift, and go to state 119
+
+
+State 108
+
+   44 retorno: RETORNA expressao SEMI •
+
+    $default  reduce using rule 44 (retorno)
+
+
+State 109
+
+   28 decl_dataset: DATASET STRING_LITERAL LBRACE • campos_dataset RBRACE SEMI
+
+    IDENT  shift, and go to state 22
+
+    campos_dataset  go to state 156
+    campo_dataset   go to state 157
+    identificador   go to state 158
+
+
+State 110
+
+   87 lista_generica_expressoes: expressao • COMMA expressao
+
+    COMMA  shift, and go to state 120
+
+
+State 111
+
+   42 mostrar: MOSTRAR LPAREN lista_generica_expressoes • RPAREN SEMI
+   88 lista_generica_expressoes: lista_generica_expressoes • COMMA expressao
+
+    COMMA   shift, and go to state 122
+    RPAREN  shift, and go to state 159
+
+
+State 112
+
+   45 se_senao: SE LPAREN expressao • RPAREN bloco opt_senao
+
+    RPAREN  shift, and go to state 160
+
+
+State 113
+
+   48 enquanto: ENQUANTO LPAREN expressao • RPAREN bloco
+
+    RPAREN  shift, and go to state 161
+
+
+State 114
+
+   93 primario: LPAREN expressao RPAREN •
+
+    $default  reduce using rule 93 (primario)
+
+
+State 115
+
+   49 bloco: LBRACE bloco_conteudo RBRACE •
+
+    $default  reduce using rule 49 (bloco)
+
+
+State 116
+
+   53 bloco_conteudo_item_list: bloco_conteudo_item_list bloco_conteudo_item •
+
+    $default  reduce using rule 53 (bloco_conteudo_item_list)
+
+
+State 117
+
+  100 campos_tabela: campos_tabela COMMA • campo_tabela
+
+    IDENT  shift, and go to state 22
+
+    campo_tabela   go to state 162
+    identificador  go to state 107
+
+
+State 118
+
+   98 tabela: LBRACE campos_tabela RBRACE •
+
+    $default  reduce using rule 98 (tabela)
+
+
+State 119
+
+  101 campo_tabela: identificador COLON • lista
+
+    LBRACKET  shift, and go to state 17
+
+    lista  go to state 163
+
+
+State 120
+
+   87 lista_generica_expressoes: expressao COMMA • expressao
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    expressao            go to state 164
+    logico_ou            go to state 40
+    logico_e             go to state 41
+    igualdade            go to state 42
+    relacional           go to state 43
+    aditiva              go to state 44
+    multiplicativa       go to state 45
+    unaria               go to state 46
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 121
+
+   97 lista: LBRACKET opt_lista_generica_expressoes RBRACKET •
+
+    $default  reduce using rule 97 (lista)
+
+
+State 122
+
+   88 lista_generica_expressoes: lista_generica_expressoes COMMA • expressao
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    expressao            go to state 165
+    logico_ou            go to state 40
+    logico_e             go to state 41
+    igualdade            go to state 42
+    relacional           go to state 43
+    aditiva              go to state 44
+    multiplicativa       go to state 45
+    unaria               go to state 46
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 123
+
+  102 chamada_estatistica: STAT_NAME LPAREN opt_lista_generica_expressoes • RPAREN
+
+    RPAREN  shift, and go to state 166
+
+
+State 124
+
+   58 logico_ou: logico_ou OR logico_e •
+   60 logico_e: logico_e • AND igualdade
+
+    AND  shift, and go to state 85
+
+    $default  reduce using rule 58 (logico_ou)
+
+
+State 125
+
+   60 logico_e: logico_e AND igualdade •
+   62 igualdade: igualdade • EQ relacional
+   63          | igualdade • NE relacional
+
+    EQ  shift, and go to state 86
+    NE  shift, and go to state 87
+
+    $default  reduce using rule 60 (logico_e)
+
+
+State 126
+
+   62 igualdade: igualdade EQ relacional •
+   65 relacional: relacional • LT aditiva
+   66           | relacional • GT aditiva
+   67           | relacional • LE aditiva
+   68           | relacional • GE aditiva
+
+    LE  shift, and go to state 88
+    GE  shift, and go to state 89
+    LT  shift, and go to state 90
+    GT  shift, and go to state 91
+
+    $default  reduce using rule 62 (igualdade)
+
+
+State 127
+
+   63 igualdade: igualdade NE relacional •
+   65 relacional: relacional • LT aditiva
+   66           | relacional • GT aditiva
+   67           | relacional • LE aditiva
+   68           | relacional • GE aditiva
+
+    LE  shift, and go to state 88
+    GE  shift, and go to state 89
+    LT  shift, and go to state 90
+    GT  shift, and go to state 91
+
+    $default  reduce using rule 63 (igualdade)
+
+
+State 128
+
+   67 relacional: relacional LE aditiva •
+   70 aditiva: aditiva • '+' multiplicativa
+   71        | aditiva • '-' multiplicativa
+
+    '+'  shift, and go to state 92
+    '-'  shift, and go to state 93
+
+    $default  reduce using rule 67 (relacional)
+
+
+State 129
+
+   68 relacional: relacional GE aditiva •
+   70 aditiva: aditiva • '+' multiplicativa
+   71        | aditiva • '-' multiplicativa
+
+    '+'  shift, and go to state 92
+    '-'  shift, and go to state 93
+
+    $default  reduce using rule 68 (relacional)
+
+
+State 130
+
+   65 relacional: relacional LT aditiva •
+   70 aditiva: aditiva • '+' multiplicativa
+   71        | aditiva • '-' multiplicativa
+
+    '+'  shift, and go to state 92
+    '-'  shift, and go to state 93
+
+    $default  reduce using rule 65 (relacional)
+
+
+State 131
+
+   66 relacional: relacional GT aditiva •
+   70 aditiva: aditiva • '+' multiplicativa
+   71        | aditiva • '-' multiplicativa
+
+    '+'  shift, and go to state 92
+    '-'  shift, and go to state 93
+
+    $default  reduce using rule 66 (relacional)
+
+
+State 132
+
+   70 aditiva: aditiva '+' multiplicativa •
+   73 multiplicativa: multiplicativa • '*' unaria
+   74               | multiplicativa • '/' unaria
+   75               | multiplicativa • '%' unaria
+
+    '*'  shift, and go to state 94
+    '/'  shift, and go to state 95
+    '%'  shift, and go to state 96
+
+    $default  reduce using rule 70 (aditiva)
+
+
+State 133
+
+   71 aditiva: aditiva '-' multiplicativa •
+   73 multiplicativa: multiplicativa • '*' unaria
+   74               | multiplicativa • '/' unaria
+   75               | multiplicativa • '%' unaria
+
+    '*'  shift, and go to state 94
+    '/'  shift, and go to state 95
+    '%'  shift, and go to state 96
+
+    $default  reduce using rule 71 (aditiva)
+
+
+State 134
+
+   73 multiplicativa: multiplicativa '*' unaria •
+
+    $default  reduce using rule 73 (multiplicativa)
+
+
+State 135
+
+   74 multiplicativa: multiplicativa '/' unaria •
+
+    $default  reduce using rule 74 (multiplicativa)
+
+
+State 136
+
+   75 multiplicativa: multiplicativa '%' unaria •
+
+    $default  reduce using rule 75 (multiplicativa)
+
+
+State 137
+
+   80 pipeline: pipeline PIPE aplicacao •
+   82 aplicacao: aplicacao • LPAREN opt_lista_generica_expressoes RPAREN
+   83          | aplicacao • DOT IDENT
+
+    LPAREN  shift, and go to state 98
+    DOT     shift, and go to state 99
+
+    $default  reduce using rule 80 (pipeline)
+
+
+State 138
+
+   82 aplicacao: aplicacao LPAREN opt_lista_generica_expressoes • RPAREN
+
+    RPAREN  shift, and go to state 167
+
+
+State 139
+
+   83 aplicacao: aplicacao DOT IDENT •
+
+    $default  reduce using rule 83 (aplicacao)
+
+
+State 140
+
+   43 ler: identificador ASSIGN LER • LPAREN RPAREN SEMI
+
+    LPAREN  shift, and go to state 168
+
+
+State 141
+
+   41 atribuicao: identificador ASSIGN expressao • SEMI
+
+    SEMI  shift, and go to state 169
+
+
+State 142
+
+   17 opt_tipo: COLON • tipo
+
+    INT_TYPE     shift, and go to state 147
+    FLOAT_TYPE   shift, and go to state 148
+    BOOL_TYPE    shift, and go to state 149
+    STRING_TYPE  shift, and go to state 150
+    LIST_TYPE    shift, and go to state 151
+
+    tipo  go to state 170
+
+
+State 143
+
+   11 decl_variavel: DECL VAL identificador opt_tipo • ASSIGN expressao SEMI
+
+    ASSIGN  shift, and go to state 171
+
+
+State 144
+
+   12 decl_variavel: DECL VAR identificador opt_tipo • ASSIGN expressao SEMI
+
+    ASSIGN  shift, and go to state 172
+
+
+State 145
+
+   13 registrador_decl: REG VAL identificador opt_tipo • ASSIGN expressao SEMI
+
+    ASSIGN  shift, and go to state 173
+
+
+State 146
+
+   14 registrador_decl: REG VAR identificador opt_tipo • ASSIGN expressao SEMI
+
+    ASSIGN  shift, and go to state 174
+
+
+State 147
+
+   18 tipo: INT_TYPE •
+
+    $default  reduce using rule 18 (tipo)
+
+
+State 148
+
+   19 tipo: FLOAT_TYPE •
+
+    $default  reduce using rule 19 (tipo)
+
+
+State 149
+
+   20 tipo: BOOL_TYPE •
+
+    $default  reduce using rule 20 (tipo)
+
+
+State 150
+
+   21 tipo: STRING_TYPE •
+
+    $default  reduce using rule 21 (tipo)
+
+
+State 151
+
+   22 tipo: LIST_TYPE •
+
+    $default  reduce using rule 22 (tipo)
+
+
+State 152
+
+   15 sensor_decl: SENSOR identificador COLON tipo • SEMI
+
+    SEMI  shift, and go to state 175
+
+
+State 153
+
+   23 decl_funcao: FUNC identificador LPAREN opt_lista_parametros • RPAREN bloco
+
+    RPAREN  shift, and go to state 176
+
+
+State 154
+
+   25 opt_lista_parametros: lista_parametros •
+   27 lista_parametros: lista_parametros • COMMA identificador
+
+    COMMA  shift, and go to state 177
+
+    $default  reduce using rule 25 (opt_lista_parametros)
+
+
+State 155
+
+   26 lista_parametros: identificador •
+
+    $default  reduce using rule 26 (lista_parametros)
+
+
+State 156
+
+   28 decl_dataset: DATASET STRING_LITERAL LBRACE campos_dataset • RBRACE SEMI
+   30 campos_dataset: campos_dataset • COMMA campo_dataset
+
+    COMMA   shift, and go to state 178
+    RBRACE  shift, and go to state 179
+
+
+State 157
+
+   29 campos_dataset: campo_dataset •
+
+    $default  reduce using rule 29 (campos_dataset)
+
+
+State 158
+
+   31 campo_dataset: identificador • COLON lista
+
+    COLON  shift, and go to state 180
+
+
+State 159
+
+   42 mostrar: MOSTRAR LPAREN lista_generica_expressoes RPAREN • SEMI
+
+    SEMI  shift, and go to state 181
+
+
+State 160
+
+   45 se_senao: SE LPAREN expressao RPAREN • bloco opt_senao
+
+    LBRACE  shift, and go to state 182
+
+    bloco  go to state 183
+
+
+State 161
+
+   48 enquanto: ENQUANTO LPAREN expressao RPAREN • bloco
+
+    LBRACE  shift, and go to state 182
+
+    bloco  go to state 184
+
+
+State 162
+
+  100 campos_tabela: campos_tabela COMMA campo_tabela •
+
+    $default  reduce using rule 100 (campos_tabela)
+
+
+State 163
+
+  101 campo_tabela: identificador COLON lista •
+
+    $default  reduce using rule 101 (campo_tabela)
+
+
+State 164
+
+   87 lista_generica_expressoes: expressao COMMA expressao •
+
+    $default  reduce using rule 87 (lista_generica_expressoes)
+
+
+State 165
+
+   88 lista_generica_expressoes: lista_generica_expressoes COMMA expressao •
+
+    $default  reduce using rule 88 (lista_generica_expressoes)
+
+
+State 166
+
+  102 chamada_estatistica: STAT_NAME LPAREN opt_lista_generica_expressoes RPAREN •
+
+    $default  reduce using rule 102 (chamada_estatistica)
+
+
+State 167
+
+   82 aplicacao: aplicacao LPAREN opt_lista_generica_expressoes RPAREN •
+
+    $default  reduce using rule 82 (aplicacao)
+
+
+State 168
+
+   43 ler: identificador ASSIGN LER LPAREN • RPAREN SEMI
+
+    RPAREN  shift, and go to state 185
+
+
+State 169
+
+   41 atribuicao: identificador ASSIGN expressao SEMI •
+
+    $default  reduce using rule 41 (atribuicao)
+
+
+State 170
+
+   17 opt_tipo: COLON tipo •
+
+    $default  reduce using rule 17 (opt_tipo)
+
+
+State 171
+
+   11 decl_variavel: DECL VAL identificador opt_tipo ASSIGN • expressao SEMI
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    expressao            go to state 186
+    logico_ou            go to state 40
+    logico_e             go to state 41
+    igualdade            go to state 42
+    relacional           go to state 43
+    aditiva              go to state 44
+    multiplicativa       go to state 45
+    unaria               go to state 46
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 172
+
+   12 decl_variavel: DECL VAR identificador opt_tipo ASSIGN • expressao SEMI
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    expressao            go to state 187
+    logico_ou            go to state 40
+    logico_e             go to state 41
+    igualdade            go to state 42
+    relacional           go to state 43
+    aditiva              go to state 44
+    multiplicativa       go to state 45
+    unaria               go to state 46
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 173
+
+   13 registrador_decl: REG VAL identificador opt_tipo ASSIGN • expressao SEMI
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    expressao            go to state 188
+    logico_ou            go to state 40
+    logico_e             go to state 41
+    igualdade            go to state 42
+    relacional           go to state 43
+    aditiva              go to state 44
+    multiplicativa       go to state 45
+    unaria               go to state 46
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 174
+
+   14 registrador_decl: REG VAR identificador opt_tipo ASSIGN • expressao SEMI
+
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 61
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    expressao            go to state 189
+    logico_ou            go to state 40
+    logico_e             go to state 41
+    igualdade            go to state 42
+    relacional           go to state 43
+    aditiva              go to state 44
+    multiplicativa       go to state 45
+    unaria               go to state 46
+    pipeline             go to state 47
+    aplicacao            go to state 48
+    primario             go to state 49
+    lista                go to state 50
+    tabela               go to state 51
+    chamada_estatistica  go to state 52
+    identificador        go to state 63
+
+
+State 175
+
+   15 sensor_decl: SENSOR identificador COLON tipo SEMI •
+
+    $default  reduce using rule 15 (sensor_decl)
+
+
+State 176
+
+   23 decl_funcao: FUNC identificador LPAREN opt_lista_parametros RPAREN • bloco
+
+    LBRACE  shift, and go to state 182
+
+    bloco  go to state 190
+
+
+State 177
+
+   27 lista_parametros: lista_parametros COMMA • identificador
+
+    IDENT  shift, and go to state 22
+
+    identificador  go to state 191
+
+
+State 178
+
+   30 campos_dataset: campos_dataset COMMA • campo_dataset
+
+    IDENT  shift, and go to state 22
+
+    campo_dataset  go to state 192
+    identificador  go to state 158
+
+
+State 179
+
+   28 decl_dataset: DATASET STRING_LITERAL LBRACE campos_dataset RBRACE • SEMI
+
+    SEMI  shift, and go to state 193
+
+
+State 180
+
+   31 campo_dataset: identificador COLON • lista
+
+    LBRACKET  shift, and go to state 17
+
+    lista  go to state 194
+
+
+State 181
+
+   42 mostrar: MOSTRAR LPAREN lista_generica_expressoes RPAREN SEMI •
+
+    $default  reduce using rule 42 (mostrar)
+
+
+State 182
+
+   49 bloco: LBRACE • bloco_conteudo RBRACE
+
+    error           shift, and go to state 4
+    DECL            shift, and go to state 5
+    REG             shift, and go to state 6
+    SENSOR          shift, and go to state 7
+    FUNC            shift, and go to state 8
+    RETORNA         shift, and go to state 9
+    DATASET         shift, and go to state 10
+    MOSTRAR         shift, and go to state 11
+    SE              shift, and go to state 12
+    ENQUANTO        shift, and go to state 13
+    NOT             shift, and go to state 14
+    LPAREN          shift, and go to state 15
+    LBRACE          shift, and go to state 16
+    LBRACKET        shift, and go to state 17
+    INT_LITERAL     shift, and go to state 18
+    FLOAT_LITERAL   shift, and go to state 19
+    STRING_LITERAL  shift, and go to state 20
+    STAT_NAME       shift, and go to state 21
+    IDENT           shift, and go to state 22
+    '-'             shift, and go to state 23
+
+    RBRACE  reduce using rule 50 (bloco_conteudo)
+
+    declaracao                go to state 70
+    decl_variavel             go to state 26
+    registrador_decl          go to state 27
+    sensor_decl               go to state 28
+    decl_funcao               go to state 29
+    decl_dataset              go to state 30
+    comando                   go to state 71
+    atribuicao                go to state 32
+    mostrar                   go to state 33
+    ler                       go to state 34
+    retorno                   go to state 35
+    se_senao                  go to state 36
+    enquanto                  go to state 37
+    bloco                     go to state 38
+    bloco_conteudo            go to state 72
+    bloco_conteudo_item_list  go to state 73
+    bloco_conteudo_item       go to state 74
+    expressao                 go to state 39
+    logico_ou                 go to state 40
+    logico_e                  go to state 41
+    igualdade                 go to state 42
+    relacional                go to state 43
+    aditiva                   go to state 44
+    multiplicativa            go to state 45
+    unaria                    go to state 46
+    pipeline                  go to state 47
+    aplicacao                 go to state 48
+    primario                  go to state 49
+    lista                     go to state 50
+    tabela                    go to state 51
+    chamada_estatistica       go to state 52
+    identificador             go to state 53
+
+
+State 183
+
+   45 se_senao: SE LPAREN expressao RPAREN bloco • opt_senao
+
+    SENAO  shift, and go to state 195
+
+    $default  reduce using rule 46 (opt_senao)
+
+    opt_senao  go to state 196
+
+
+State 184
+
+   48 enquanto: ENQUANTO LPAREN expressao RPAREN bloco •
+
+    $default  reduce using rule 48 (enquanto)
+
+
+State 185
+
+   43 ler: identificador ASSIGN LER LPAREN RPAREN • SEMI
+
+    SEMI  shift, and go to state 197
+
+
+State 186
+
+   11 decl_variavel: DECL VAL identificador opt_tipo ASSIGN expressao • SEMI
+
+    SEMI  shift, and go to state 198
+
+
+State 187
+
+   12 decl_variavel: DECL VAR identificador opt_tipo ASSIGN expressao • SEMI
+
+    SEMI  shift, and go to state 199
+
+
+State 188
+
+   13 registrador_decl: REG VAL identificador opt_tipo ASSIGN expressao • SEMI
+
+    SEMI  shift, and go to state 200
+
+
+State 189
+
+   14 registrador_decl: REG VAR identificador opt_tipo ASSIGN expressao • SEMI
+
+    SEMI  shift, and go to state 201
+
+
+State 190
+
+   23 decl_funcao: FUNC identificador LPAREN opt_lista_parametros RPAREN bloco •
+
+    $default  reduce using rule 23 (decl_funcao)
+
+
+State 191
+
+   27 lista_parametros: lista_parametros COMMA identificador •
+
+    $default  reduce using rule 27 (lista_parametros)
+
+
+State 192
+
+   30 campos_dataset: campos_dataset COMMA campo_dataset •
+
+    $default  reduce using rule 30 (campos_dataset)
+
+
+State 193
+
+   28 decl_dataset: DATASET STRING_LITERAL LBRACE campos_dataset RBRACE SEMI •
+
+    $default  reduce using rule 28 (decl_dataset)
+
+
+State 194
+
+   31 campo_dataset: identificador COLON lista •
+
+    $default  reduce using rule 31 (campo_dataset)
+
+
+State 195
+
+   47 opt_senao: SENAO • bloco
+
+    LBRACE  shift, and go to state 182
+
+    bloco  go to state 202
+
+
+State 196
+
+   45 se_senao: SE LPAREN expressao RPAREN bloco opt_senao •
+
+    $default  reduce using rule 45 (se_senao)
+
+
+State 197
+
+   43 ler: identificador ASSIGN LER LPAREN RPAREN SEMI •
+
+    $default  reduce using rule 43 (ler)
+
+
+State 198
+
+   11 decl_variavel: DECL VAL identificador opt_tipo ASSIGN expressao SEMI •
+
+    $default  reduce using rule 11 (decl_variavel)
+
+
+State 199
+
+   12 decl_variavel: DECL VAR identificador opt_tipo ASSIGN expressao SEMI •
+
+    $default  reduce using rule 12 (decl_variavel)
+
+
+State 200
+
+   13 registrador_decl: REG VAL identificador opt_tipo ASSIGN expressao SEMI •
+
+    $default  reduce using rule 13 (registrador_decl)
+
+
+State 201
+
+   14 registrador_decl: REG VAR identificador opt_tipo ASSIGN expressao SEMI •
+
+    $default  reduce using rule 14 (registrador_decl)
+
+
+State 202
+
+   47 opt_senao: SENAO bloco •
+
+    $default  reduce using rule 47 (opt_senao)
