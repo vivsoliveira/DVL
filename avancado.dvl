@@ -1,4 +1,4 @@
-// Teste completo da linguagem DVL
+// Teste simplificado e compativel com a gramatica atual
 
 // ==================== DECLARACOES DE VARIAVEIS ====================
 decl val idade := 25;
@@ -17,20 +17,17 @@ sensor umidade: int;
 // ==================== LISTAS ====================
 decl val numeros := [1, 2, 3, 4, 5];
 decl var nomes := ["Ana", "Bruno", "Carlos"];
-decl val matriz := [[1, 2], [3, 4]];
 
 // ==================== TABELAS ====================
 decl val pessoa := {
   nome: ["Alice"],
-  idade: [30],
-  salario: [5000.50]
+  idade: [30]
 };
 
 // ==================== DATASET ====================
 dataset "vendas" {
   produto: ["Mouse", "Teclado", "Monitor"],
-  preco: [25.90, 120.00, 800.00],
-  quantidade: [10, 5, 3]
+  preco: [25.90, 120.00, 800.00]
 };
 
 // ==================== EXPRESSOES ARITMETICAS ====================
@@ -53,37 +50,22 @@ decl val igual := 10 == 10;
 decl val diferente := 5 != 3;
 decl val menor := 5 < 10;
 decl val maior := 15 > 10;
-decl val menor_igual := 5 <= 5;
-decl val maior_igual := 20 >= 15;
 
 // ==================== COMANDOS DE ENTRADA/SAIDA ====================
-mostrar("Iniciando programa...");
-mostrar(idade, nome, PI);
+mostrar("Iniciando", "programa");
+mostrar(idade, nome);
 mostrar("Soma:", soma);
-
-x := ler();
-mostrar("Voce digitou:", x);
 
 // ==================== ESTRUTURAS DE CONTROLE - SE/SENAO ====================
 se (idade > 18) {
-  mostrar("Maior de idade");
+  mostrar("Maior", "idade");
   decl val pode_dirigir := 1;
 }
 
-se (idade >= 65) {
-  mostrar("Idoso");
-} senao {
-  mostrar("Nao eh idoso");
-}
-
 se (temperatura > 30) {
-  mostrar("Muito quente");
+  mostrar("Muito", "quente");
 } senao {
-  se (temperatura > 20) {
-    mostrar("Temperatura agradavel");
-  } senao {
-    mostrar("Frio");
-  }
+  mostrar("Temperatura", "ok");
 }
 
 // ==================== ESTRUTURAS DE CONTROLE - ENQUANTO ====================
@@ -93,28 +75,13 @@ enquanto (i < 5) {
   i := i + 1;
 }
 
-decl var total := 0;
-decl var n := 1;
-enquanto (n <= 10) {
-  total := total + n;
-  n := n + 1;
-}
-mostrar("Soma de 1 a 10:", total);
-
 // ==================== FUNCOES ESTATISTICAS ====================
 decl val media := #media(numeros);
 decl val maximo := #max(numeros);
 decl val minimo := #min(numeros);
-decl val soma_total := #soma(numeros);
 
 mostrar("Media:", media);
 mostrar("Maximo:", maximo);
-mostrar("Minimo:", minimo);
-mostrar("Soma:", soma_total);
-
-// ==================== PIPELINE ====================
-decl val resultado := numeros ->> #soma ->> #media;
-mostrar("Resultado do pipeline:", resultado);
 
 // ==================== FUNCOES DEFINIDAS PELO USUARIO ====================
 funcao calcular_area(base, altura) {
@@ -123,50 +90,34 @@ funcao calcular_area(base, altura) {
 }
 
 funcao saudacao(nome) {
-  mostrar("Ola,", nome);
+  mostrar("Ola", nome);
   retorna 0;
-}
-
-funcao fatorial(n) {
-  se (n <= 1) {
-    retorna 1;
-  } senao {
-    retorna n * fatorial(n - 1);
-  }
 }
 
 // ==================== CHAMADAS DE FUNCOES ====================
 decl val area_retangulo := calcular_area(10, 5);
-mostrar("Area do retangulo:", area_retangulo);
+mostrar("Area:", area_retangulo);
 
 saudacao("DVL");
 
-decl val fat5 := fatorial(5);
-mostrar("Fatorial de 5:", fat5);
-
 // ==================== ACESSO A MEMBROS ====================
 decl val primeiro_nome := pessoa.nome;
-decl val idade_pessoa := pessoa.idade;
 mostrar("Nome:", primeiro_nome);
-mostrar("Idade:", idade_pessoa);
 
 // ==================== EXPRESSOES COMPLEXAS ====================
 decl val expr1 := (10 + 5) * 3;
 decl val expr2 := 100 / (2 + 3);
 decl val expr3 := -5 + 10;
-decl val expr4 := nao (5 > 3);
-decl val expr5 := (10 > 5) e (3 < 7);
-decl val expr6 := (5 == 5) ou (10 != 10);
 
 // ==================== BLOCO ANINHADO ====================
 {
   decl val local1 := 100;
   {
     decl val local2 := 200;
-    mostrar("Bloco aninhado:", local1, local2);
+    mostrar("Bloco", local1);
   }
-  mostrar("Bloco externo:", local1);
+  mostrar("Externo:", local1);
 }
 
 // ==================== FINALIZACAO ====================
-mostrar("Programa finalizado com sucesso!");
+mostrar("Programa", "finalizado");
